@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">KampusChat</string>
+    <string name="text_male">Male</string>
+    <string name="text_female">Female</string>
+
+
+    <string name="error_field_blank">This field cannot be blank</string>
+    <string name="error_credentials_invalid">Credentials are invalid</string>
+    <string name="error_something_wrong">Something went wrong</string>
+    <string name="error_username_taken">Username has already been taken</string>
+    <string name="error_email_taken">Email has already been taken</string>
+    <string name="error_at_least_2">Enter at least 2 character</string>
+    <string name="error_email_not_matched">Enter correct email address</string>
+    <string name="error_at_least_6">Enter at least 6 character</string>
+    <string name="error_passwords_not_matched">Passwords are not matched</string>
+    <string name="error_select_gender">Select Gender</string>
+    <string name="error_select_date_of_birth">Select Date Of Birth</string>
+
+</resources>
