@@ -176,7 +176,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
             activity!!.finish()
 
         } else {
-            Log.e("Body",response.errorBody().toString())
+            Log.e("Body", response.errorBody().toString())
             handleErrors(response.errorBody(), response.code())
         }
     }
@@ -200,7 +200,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
                         view!!.editTextEmail.error = getString(R.string.error_email_taken)
                     }
 
-                    Log.e("Key",error.key)
+                    Log.e("Key", error.key)
 
                 }
 

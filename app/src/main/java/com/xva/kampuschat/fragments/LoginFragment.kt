@@ -11,10 +11,10 @@ import com.xva.kampuschat.R
 import com.xva.kampuschat.activities.HomeActivity
 import com.xva.kampuschat.api.ApiErrorHelper
 import com.xva.kampuschat.api.RetrofitBuilder
-import com.xva.kampuschat.utils.SharedPreferencesHelper
 import com.xva.kampuschat.entities.AccessToken
 import com.xva.kampuschat.interfaces.ApiService
 import com.xva.kampuschat.utils.FragmentHelper
+import com.xva.kampuschat.utils.SharedPreferencesHelper
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import okhttp3.ResponseBody
@@ -40,9 +40,10 @@ class LoginFragment : Fragment(), View.OnClickListener, Callback<AccessToken> {
         mView = inflater.inflate(R.layout.fragment_login, container, false)
         preferencesHelper = SharedPreferencesHelper(activity!!)
         service = RetrofitBuilder.createService(ApiService::class.java)
+
         mView.buttonLogin.setOnClickListener(this)
         mView.textViewLink.setOnClickListener(this)
-
+        mView.textViewForgotPassword.setOnClickListener(this)
 
         return mView
     }
@@ -57,6 +58,10 @@ class LoginFragment : Fragment(), View.OnClickListener, Callback<AccessToken> {
 
             R.id.textViewLink -> {
                 loadUniversityFragment()
+            }
+
+            R.id.textViewForgotPassword -> {
+                loadForgotPasswordFragment()
             }
 
         }
@@ -121,16 +126,21 @@ class LoginFragment : Fragment(), View.OnClickListener, Callback<AccessToken> {
 
         }
         // ELSE 404 , 500 vs ...
-        Toast.makeText(activity!!, getString(R.string.error_something_wrong), Toast.LENGTH_LONG).show()
+        Toast.makeText(activity!!, getString(R.string.error_something_wrong), Toast.LENGTH_LONG)
+            .show()
 
 
     }
 
 
-    private fun loadUniversityFragment(){
-        FragmentHelper.changeFragment("University",activity!!.supportFragmentManager)
+    private fun loadUniversityFragment() {
+        FragmentHelper.changeFragment("University", fragmentManager!!)
     }
 
+    private fun loadForgotPasswordFragment() {
+
+        FragmentHelper.changeFragment("ForgotPassword", fragmentManager!!)
+    }
 
 
 }

@@ -38,12 +38,12 @@ interface ApiService {
 
 
     @GET("forgotPassword/{email}")
-    fun forgotPassword()
+    fun sendCode(@Path("email") email: String):Call<String>
 
 
     @POST("updatePassword")
     @FormUrlEncoded
-    fun updatePassword(@Field("email") email: String, @Field("code") code: String, @Field("password") password: String)
+    fun updatePassword(@Field("email") email: String, @Field("code") code: String, @Field("password") password: String):Call<String>
 
 
     @POST("verifyEmail")

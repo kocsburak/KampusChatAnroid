@@ -39,6 +39,10 @@ class FragmentHelper {
                     fragmentTransaction.replace(R.id.fragment_place_holder, RegisterFragment())
                 }
 
+                "ForgotPassword" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, ForgotPassword())
+                }
+
             }
 
             fragmentTransaction.commit()

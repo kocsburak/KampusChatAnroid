@@ -15,5 +15,6 @@
     <string name="error_passwords_not_matched">Passwords are not matched</string>
     <string name="error_select_gender">Select Gender</string>
     <string name="error_select_date_of_birth">Select Date Of Birth</string>
-
+    <string name="error_code_invalid">Code is invalid</string>
+    <string name="error_email_not_found">Email is not found</string>
 </resources>
