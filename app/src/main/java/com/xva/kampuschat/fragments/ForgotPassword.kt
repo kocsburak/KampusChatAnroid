@@ -157,14 +157,16 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
             when (responseCount) {
                 0 -> mView.editTextEmail.error = getString(R.string.error_email_not_found)
                 1 -> mView.editTextCode.error = getString(R.string.error_code_invalid)
-                else ->
-                    Toast.makeText(
-                        activity!!,
-                        getString(R.string.error_something_wrong),
-                        Toast.LENGTH_LONG
-                    )
-                        .show()
+
             }
+
+            Toast.makeText(
+                activity!!,
+                getString(R.string.error_something_wrong),
+                Toast.LENGTH_LONG
+            )
+                .show()
+
 
         }
 
