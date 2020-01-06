@@ -27,7 +27,7 @@ class DepartmentAdapter : RecyclerView.Adapter<DepartmentAdapter.MyViewHolder> {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = inflater!!.inflate(R.layout.item_department, parent, false)
+        val view = inflater!!.inflate(R.layout.item_university, parent, false)
         return MyViewHolder(view)
     }
 

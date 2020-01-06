@@ -13,6 +13,7 @@ import com.xva.kampuschat.adapters.UniversityAdapter
 import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.entities.University
 import com.xva.kampuschat.interfaces.ApiService
+import com.xva.kampuschat.utils.DialogHelper
 import com.xva.kampuschat.utils.EventBusHelper
 import com.xva.kampuschat.utils.FragmentHelper
 import kotlinx.android.synthetic.main.fragment_university.*
@@ -31,6 +32,7 @@ class UniversityFragment : Fragment(), Callback<List<University>>,
     private lateinit var service: ApiService
     private lateinit var call: Call<List<University>>
     private lateinit var list: List<University>
+    private lateinit var dialogHelper: DialogHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,12 +42,14 @@ class UniversityFragment : Fragment(), Callback<List<University>>,
 
         mView = inflater.inflate(R.layout.fragment_university, container, false)
         service = RetrofitBuilder.createService(ApiService::class.java)
+        dialogHelper = DialogHelper(activity!!)
         getUniversities()
         return mView
     }
 
 
     private fun getUniversities() {
+        dialogHelper.progress()
         call = service.getUniversities()
         call.enqueue(this)
     }
@@ -53,6 +57,7 @@ class UniversityFragment : Fragment(), Callback<List<University>>,
 
     override fun onFailure(call: Call<List<University>>, t: Throwable) {
         Toast.makeText(activity!!, t.message, Toast.LENGTH_LONG).show()
+        dialogHelper.progressDismiss()
     }
 
     override fun onResponse(call: Call<List<University>>, response: Response<List<University>>) {
@@ -64,6 +69,8 @@ class UniversityFragment : Fragment(), Callback<List<University>>,
             Toast.makeText(activity!!, getString(R.string.error_something_wrong), Toast.LENGTH_LONG)
                 .show()
         }
+
+        dialogHelper.progressDismiss()
     }
 
 

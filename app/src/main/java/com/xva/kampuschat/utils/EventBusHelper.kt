@@ -8,5 +8,6 @@ class EventBusHelper {
 
     internal class sendUniversity(var university: University)
     internal class sendDepartment(var department:Department)
+    internal class publishFragment(var name:String)
 
 }

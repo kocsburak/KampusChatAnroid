@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.xva.kampuschat.R
 import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.interfaces.ApiService
+import com.xva.kampuschat.utils.DialogHelper
 import com.xva.kampuschat.utils.FragmentHelper
 import kotlinx.android.synthetic.main.fragment_forgotpassword.view.*
 import retrofit2.Call
@@ -25,6 +26,8 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
     private lateinit var call: Call<String>
     private var responseCount = 0
 
+    private lateinit var dialogHelper: DialogHelper
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,8 +35,9 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
     ): View? {
         mView = inflater.inflate(R.layout.fragment_forgotpassword, container, false)
         service = RetrofitBuilder.createService(ApiService::class.java)
-
+        dialogHelper = DialogHelper(activity!!)
         mView.buttonDone.setOnClickListener(this)
+        mView.link2.setOnClickListener(this)
 
         return mView
     }
@@ -41,15 +45,25 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
 
     override fun onClick(v: View?) {
 
-        if (responseCount == 0 && isEmailValid()) {
-            sendCode()
-        } else {
+        when (v!!.id) {
+            R.id.buttonDone -> {
+                if (responseCount == 0 && isEmailValid()) {
+                    sendCode()
+                } else {
 
-            if (validatePasswordAndCode()) {
-                updatePassword()
+                    if (validatePasswordAndCode()) {
+                        updatePassword()
+                    }
+
+                }
+            }
+
+            R.id.link2 -> {
+                loadLoginFragment()
             }
 
         }
+
 
     }
 
@@ -70,7 +84,7 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
 
 
     private fun sendCode() {
-
+        dialogHelper.progress()
         call = service.sendCode(mView.editTextEmail.text.toString())
         call.enqueue(this)
 
@@ -82,16 +96,16 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
         var error = 0
 
         when {
-            mView.editTextPassword.text.isEmpty() -> {
-                mView.editTextPassword.error = getString(R.string.error_field_blank)
+            mView.Password.text.isEmpty() -> {
+                mView.Password.error = getString(R.string.error_field_blank)
                 error++
             }
-            mView.editTextPassword.text.toString() != mView.editTextConfirmPassword.text.toString() -> {
-                mView.editTextPassword.error = getString(R.string.error_passwords_not_matched)
+            mView.Password.text.toString() != mView.editTextConfirmPassword.text.toString() -> {
+                mView.Password.error = getString(R.string.error_passwords_not_matched)
                 error++
             }
-            mView.editTextPassword.text.length < 6 -> {
-                mView.editTextPassword.error = getString(R.string.error_at_least_6)
+            mView.Password.text.length < 6 -> {
+                mView.Password.error = getString(R.string.error_at_least_6)
                 error++
             }
         }
@@ -106,10 +120,11 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
 
 
     private fun updatePassword() {
+        dialogHelper.progress()
         call = service.updatePassword(
             mView.editTextEmail.text.toString(),
             mView.editTextCode.text.toString(),
-            mView.editTextPassword.text.toString()
+            mView.Password.text.toString()
         )
         call.enqueue(this)
     }
@@ -117,6 +132,7 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
 
     override fun onFailure(call: Call<String>, t: Throwable) {
         Toast.makeText(activity!!, t.message, Toast.LENGTH_LONG).show()
+        dialogHelper.progressDismiss()
     }
 
     override fun onResponse(call: Call<String>, response: Response<String>) {
@@ -129,7 +145,7 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
                 responseCount++
             } else {
                 // updatePassword function response
-                FragmentHelper.changeFragment("Login", fragmentManager!!)
+               loadLoginFragment()
             }
 
         } else {
@@ -138,7 +154,7 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
 
         }
 
-
+       dialogHelper.progressDismiss()
     }
 
 
@@ -171,6 +187,11 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
         }
 
 
+    }
+
+
+    private fun loadLoginFragment() {
+        FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager)
     }
 
 

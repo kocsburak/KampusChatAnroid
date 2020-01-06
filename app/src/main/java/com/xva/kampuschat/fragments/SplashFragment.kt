@@ -1,21 +1,22 @@
 package com.xva.kampuschat.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.xva.kampuschat.R
-import com.xva.kampuschat.activities.HomeActivity
+import com.xva.kampuschat.interfaces.IVerify
 import com.xva.kampuschat.utils.FragmentHelper
 import com.xva.kampuschat.utils.SharedPreferencesHelper
+import com.xva.kampuschat.utils.VerifyHelper
 
 
-class SplashFragment : Fragment() {
+class SplashFragment : Fragment(), IVerify {
 
 
     private lateinit var sharedPreferenceshelper: SharedPreferencesHelper
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,11 +40,21 @@ class SplashFragment : Fragment() {
             this.onDestroy()
 
         } else {
-            startActivity(Intent(activity!!, HomeActivity::class.java))
-            activity!!.finish()
+            checkUserVerify()
         }
 
 
+    }
+
+
+    private fun checkUserVerify() {
+        var verifyHelper = VerifyHelper(activity!!, this)
+        verifyHelper.checkUserVerify()
+    }
+
+
+    override fun done() {
+        activity!!.finish()
     }
 
 

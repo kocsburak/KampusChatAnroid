@@ -13,6 +13,7 @@ import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.entities.Department
 import com.xva.kampuschat.entities.University
 import com.xva.kampuschat.interfaces.ApiService
+import com.xva.kampuschat.utils.DialogHelper
 import com.xva.kampuschat.utils.EventBusHelper
 import com.xva.kampuschat.utils.FragmentHelper
 import kotlinx.android.synthetic.main.fragment_department.*
@@ -32,6 +33,7 @@ class DepartmentFragment : Fragment(), Callback<List<Department>>,
     private lateinit var call: Call<List<Department>>
     private lateinit var list: List<Department>
     private lateinit var university: University
+    private lateinit var dialogHelper: DialogHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +42,7 @@ class DepartmentFragment : Fragment(), Callback<List<Department>>,
     ): View? {
         mView = inflater.inflate(R.layout.fragment_department, container, false)
         service = RetrofitBuilder.createService(ApiService::class.java)
-
+        dialogHelper = DialogHelper(activity!!)
         return mView
     }
 
@@ -56,7 +58,6 @@ class DepartmentFragment : Fragment(), Callback<List<Department>>,
     }
 
 
-
     @Subscribe(sticky = true)
     internal fun onDataEvent(data: EventBusHelper.sendUniversity) {
         university = data.university
@@ -66,7 +67,7 @@ class DepartmentFragment : Fragment(), Callback<List<Department>>,
 
 
     private fun getDepartments() {
-
+        dialogHelper.progress()
         call = service.getDepartments(university.id)
         call.enqueue(this)
 
@@ -75,6 +76,7 @@ class DepartmentFragment : Fragment(), Callback<List<Department>>,
 
     override fun onFailure(call: Call<List<Department>>, t: Throwable) {
         Toast.makeText(activity!!, t.message, Toast.LENGTH_LONG).show()
+        dialogHelper.progressDismiss()
     }
 
     override fun onResponse(call: Call<List<Department>>, response: Response<List<Department>>) {
@@ -86,6 +88,7 @@ class DepartmentFragment : Fragment(), Callback<List<Department>>,
             Toast.makeText(activity!!, getString(R.string.error_something_wrong), Toast.LENGTH_LONG)
                 .show()
         }
+        dialogHelper.progressDismiss()
     }
 
 

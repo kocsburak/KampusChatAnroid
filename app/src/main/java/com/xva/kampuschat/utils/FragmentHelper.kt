@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.xva.kampuschat.R
 import com.xva.kampuschat.fragments.*
+import org.greenrobot.eventbus.EventBus
 
 
 class FragmentHelper {
@@ -44,7 +45,7 @@ class FragmentHelper {
                 }
 
             }
-
+            EventBus.getDefault().postSticky(EventBusHelper.publishFragment(name))
             fragmentTransaction.commit()
 
 

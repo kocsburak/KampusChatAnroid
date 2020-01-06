@@ -21,6 +21,16 @@ class SharedPreferencesHelper {
     }
 
 
+    fun saveEmail(email: String) {
+        editor.putString("email", email)
+        editor.commit()
+    }
+
+    fun getEmail(): String {
+        return pref.getString("email","")
+    }
+
+
     fun saveAccessToken(accessToken: AccessToken) {
 
         editor.putString("token_type", accessToken.token_type)

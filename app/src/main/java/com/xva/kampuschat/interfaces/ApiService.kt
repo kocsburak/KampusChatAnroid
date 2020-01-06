@@ -48,7 +48,7 @@ interface ApiService {
 
     @POST("verifyEmail")
     @FormUrlEncoded
-    fun verifyEmail(@Field("email") email: String, @Field("code") code: String)
+    fun verifyEmail(@Field("email") email: String, @Field("code") code: String):Call<String>
 
 
 }

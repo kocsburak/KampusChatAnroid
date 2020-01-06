@@ -1,5 +1,6 @@
 package com.xva.kampuschat.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -16,7 +17,11 @@ import com.xva.kampuschat.api.ApiErrorHelper
 import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.entities.AccessToken
 import com.xva.kampuschat.interfaces.ApiService
+import com.xva.kampuschat.interfaces.IDatePicker
+import com.xva.kampuschat.interfaces.IProcessDialog
+import com.xva.kampuschat.utils.DialogHelper
 import com.xva.kampuschat.utils.EventBusHelper
+import com.xva.kampuschat.utils.FragmentHelper
 import com.xva.kampuschat.utils.SharedPreferencesHelper
 import kotlinx.android.synthetic.main.fragment_register.view.*
 import okhttp3.ResponseBody
@@ -27,17 +32,19 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken> {
+class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>, IProcessDialog,
+    IDatePicker {
 
 
     private lateinit var mView: View
     private lateinit var preferencesHelper: SharedPreferencesHelper
+    private lateinit var dialogHelper: DialogHelper
     private lateinit var service: ApiService
     private lateinit var call: Call<AccessToken>
     private var departmentId = -1
     private var universityEmailType = ""
-    private var isGenderSelected = true
-    private var isDateOfBirthSelected = true
+    private var isGenderSelected = false
+    private var isDateOfBirthSelected = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,9 +53,13 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
     ): View? {
         mView = inflater.inflate(R.layout.fragment_register, container, false)
         preferencesHelper = SharedPreferencesHelper(activity!!)
+        dialogHelper = DialogHelper(activity!!)
         service = RetrofitBuilder.createService(ApiService::class.java)
 
         mView.buttonDone.setOnClickListener(this)
+        mView.link.setOnClickListener(this)
+        mView.textViewGender.setOnClickListener(this)
+        mView.textViewDateOfBirth.setOnClickListener(this)
 
         return mView
     }
@@ -80,20 +91,32 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
             R.id.buttonDone -> {
                 register()
             }
+            R.id.link -> {
+                loadLoginFragment()
+            }
+            R.id.textViewGender -> {
+                loadGender()
+            }
+
+            R.id.textViewDateOfBirth -> {
+                dialogHelper.datePicker(this)
+            }
+
         }
     }
 
 
     private fun register() {
-
+// TODO : DATE OF BIRTH DUZENLE
         if (validate()) {
+            dialogHelper.progress()
             call = service.register(
                 mView.editTextFullname.text.toString(),
                 mView.editTextEmail.text.toString(),
-                mView.editTextUsername.text.toString(),
-                mView.editTextPassword.text.toString(),
+                mView.Username.text.toString(),
+                mView.Password.text.toString(),
                 getGender(),
-                "1996-12-11",
+                mView.textViewDateOfBirth.text.toString(),
                 departmentId
             )
             call.enqueue(this)
@@ -119,18 +142,18 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
             error++
         }
 
-        if (mView.editTextUsername.length() < 2) {
-            mView.editTextUsername.error = getString(R.string.error_at_least_2)
+        if (mView.Username.length() < 2) {
+            mView.Username.error = getString(R.string.error_at_least_2)
             error++
         }
 
-        if (mView.editTextPassword.length() < 6) {
-            mView.editTextPassword.error = getString(R.string.error_at_least_6)
+        if (mView.Password.length() < 6) {
+            mView.Password.error = getString(R.string.error_at_least_6)
             error++
         }
 
-        if (mView.editTextPassword.text.toString() != mView.editTextConfirmPassword.text.toString()) {
-            mView.editTextPassword.error = getString(R.string.error_passwords_not_matched)
+        if (mView.Password.text.toString() != mView.editTextConfirmPassword.text.toString()) {
+            mView.Password.error = getString(R.string.error_passwords_not_matched)
             mView.editTextConfirmPassword.error = getString(R.string.error_passwords_not_matched)
             error++
         }
@@ -167,11 +190,13 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
 
     override fun onFailure(call: Call<AccessToken>, t: Throwable) {
         Toast.makeText(activity!!, t.message, Toast.LENGTH_LONG).show()
+        dialogHelper.progressDismiss()
     }
 
     override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
         if (response.isSuccessful) {
             preferencesHelper.saveAccessToken(response.body()!!)
+            preferencesHelper.saveEmail(mView.editTextEmail.text.toString())
             startActivity(Intent(activity!!, HomeActivity::class.java))
             activity!!.finish()
 
@@ -179,6 +204,9 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
             Log.e("Body", response.errorBody().toString())
             handleErrors(response.errorBody(), response.code())
         }
+
+        dialogHelper.progressDismiss()
+
     }
 
 
@@ -193,7 +221,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
                 for (error: Map.Entry<String, List<String>> in apiError!!.errors.entries) {
 
                     if (error.key == "username") {
-                        view!!.editTextUsername.error = getString(R.string.error_username_taken)
+                        view!!.Username.error = getString(R.string.error_username_taken)
                     }
 
                     if (error.key == "email") {
@@ -201,7 +229,6 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
                     }
 
                     Log.e("Key", error.key)
-
                 }
 
                 return
@@ -213,6 +240,35 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
             .show()
 
 
+    }
+
+
+    private fun loadGender() {
+        var genders = Array<String>(2) { "" }
+        genders[0] = getString(R.string.text_male)
+        genders[1] = getString(R.string.text_female)
+        dialogHelper.process(genders, this, getString(R.string.text_select_gender))
+    }
+
+    override fun onItemClicked(position: Int) {
+        isGenderSelected = true
+        if (position == 0) {
+            mView.textViewGender.text = getString(R.string.text_male)
+            return
+        }
+        mView.textViewGender.text = getString(R.string.text_female)
+    }
+
+
+    private fun loadLoginFragment() {
+        FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager)
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    override fun onSelectTime(year: Int, month: Int, day: Int) {
+        mView.textViewDateOfBirth.text = "$year-$month-$day"
+        isDateOfBirthSelected = true
     }
 
 
