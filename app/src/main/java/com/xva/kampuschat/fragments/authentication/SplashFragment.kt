@@ -1,4 +1,4 @@
-package com.xva.kampuschat.fragments
+package com.xva.kampuschat.fragments.authentication
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -36,7 +36,7 @@ class SplashFragment : Fragment(), IVerify {
 
         if (accessToken.access_token == "") {
 
-            FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager)
+            FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager,1)
             this.onDestroy()
 
         } else {

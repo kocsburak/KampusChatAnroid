@@ -3,7 +3,8 @@ package com.xva.kampuschat.utils
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.xva.kampuschat.R
-import com.xva.kampuschat.fragments.*
+import com.xva.kampuschat.fragments.authentication.*
+import com.xva.kampuschat.fragments.home.*
 import org.greenrobot.eventbus.EventBus
 
 
@@ -12,7 +13,7 @@ class FragmentHelper {
 
     companion object {
 
-        fun changeFragment(name: String, fragmentManager: FragmentManager) {
+        fun changeFragment(name: String, fragmentManager: FragmentManager,code:Int) {
 
             var fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
@@ -21,27 +22,68 @@ class FragmentHelper {
                 // Authentication
 
                 "Splash" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, SplashFragment())
+                    fragmentTransaction.replace(R.id.fragment_place_holder,
+                        SplashFragment()
+                    )
                 }
 
                 "Login" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, LoginFragment())
+                    fragmentTransaction.replace(R.id.fragment_place_holder,
+                        LoginFragment()
+                    )
                 }
 
                 "University" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, UniversityFragment())
+                    fragmentTransaction.replace(R.id.fragment_place_holder,
+                        UniversityFragment()
+                    )
                 }
 
                 "Department" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, DepartmentFragment())
+                    fragmentTransaction.replace(R.id.fragment_place_holder,
+                        DepartmentFragment()
+                    )
                 }
 
                 "Register" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, RegisterFragment())
+                    fragmentTransaction.replace(R.id.fragment_place_holder,
+                        RegisterFragment()
+                    )
                 }
 
                 "ForgotPassword" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, ForgotPassword())
+                    fragmentTransaction.replace(R.id.fragment_place_holder,
+                        ForgotPassword()
+                    )
+                }
+
+
+                "Profile" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, ProfileFragment(code))
+                }
+
+                "Likes" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, LikesFragment())
+                }
+
+                "Bans" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, BansFragment())
+                }
+
+                "Shuffle" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, ShuffleFragment())
+                }
+
+                "Settings" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, SettingsList())
+                }
+
+                "EditProfile" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, EditProfile())
+                }
+
+                "ChatList" -> {
+                    fragmentTransaction.replace(R.id.fragment_place_holder, ChatList())
                 }
 
             }

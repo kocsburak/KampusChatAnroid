@@ -1,4 +1,4 @@
-package com.xva.kampuschat.fragments
+package com.xva.kampuschat.fragments.authentication
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.xva.kampuschat.R
-import com.xva.kampuschat.activities.HomeActivity
+import com.xva.kampuschat.activities.VerifyActivity
 import com.xva.kampuschat.api.ApiErrorHelper
 import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.entities.AccessToken
@@ -197,7 +197,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
         if (response.isSuccessful) {
             preferencesHelper.saveAccessToken(response.body()!!)
             preferencesHelper.saveEmail(mView.editTextEmail.text.toString())
-            startActivity(Intent(activity!!, HomeActivity::class.java))
+            startActivity(Intent(activity!!, VerifyActivity::class.java))
             activity!!.finish()
 
         } else {
@@ -261,12 +261,12 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
 
 
     private fun loadLoginFragment() {
-        FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager)
+        FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager,1)
     }
 
 
     @SuppressLint("SetTextI18n")
-    override fun onSelectTime(year: Int, month: Int, day: Int) {
+    override fun onSelectTime(year: String, month: String, day: String) {
         mView.textViewDateOfBirth.text = "$year-$month-$day"
         isDateOfBirthSelected = true
     }

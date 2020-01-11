@@ -1,4 +1,4 @@
-package com.xva.kampuschat.fragments
+package com.xva.kampuschat.fragments.authentication
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -191,7 +191,7 @@ class ForgotPassword : Fragment(), View.OnClickListener, Callback<String> {
 
 
     private fun loadLoginFragment() {
-        FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager)
+        FragmentHelper.changeFragment("Login", activity!!.supportFragmentManager,1)
     }
 
 

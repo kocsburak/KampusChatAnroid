@@ -5,28 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePhoto"
         android:layout_width="96dp"
         android:layout_height="96dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:background="@color/colorGray"
+        android:layout_marginEnd="24dp"
+        android:src="@color/colorGray"
+        app:civ_border_color="@color/colorGray"
+        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Title" />
+        app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
+
 
     <TextView
         android:id="@+id/fullname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:fontFamily="casual"
         android:gravity="center"
         android:text="@string/text_fullname"
+        android:textColor="@color/colorBlue"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/colorBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +44,9 @@
         android:id="@+id/username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:fontFamily="casual"
         android:gravity="center"
         android:text="@string/text_username"
@@ -50,7 +60,9 @@
         android:id="@+id/department"
         android:layout_width="0dp"
         android:layout_height="35dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="casual"
         android:gravity="center"
@@ -66,24 +78,10 @@
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
-    <TextView
-        android:id="@+id/Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="casual"
-        android:gravity="center"
-        android:text="@string/text_matched"
-        android:textColor="@color/colorBlue"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.xva.kampuschat.fragments
+package com.xva.kampuschat.fragments.authentication
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -87,6 +87,7 @@ class LoginFragment : Fragment(), View.OnClickListener, Callback<AccessToken>, I
 
         if (response.isSuccessful) {
             preferencesHelper.saveAccessToken(response.body()!!)
+            preferencesHelper.saveEmail(mView.Username.text.toString())
             checkUserVerify()
         } else {
             dialogHelper.progressDismiss()
@@ -144,12 +145,12 @@ class LoginFragment : Fragment(), View.OnClickListener, Callback<AccessToken>, I
 
 
     private fun loadUniversityFragment() {
-        FragmentHelper.changeFragment("University", fragmentManager!!)
+        FragmentHelper.changeFragment("University", fragmentManager!!,1)
     }
 
     private fun loadForgotPasswordFragment() {
 
-        FragmentHelper.changeFragment("ForgotPassword", fragmentManager!!)
+        FragmentHelper.changeFragment("ForgotPassword", fragmentManager!!,1)
     }
 
     override fun done() {

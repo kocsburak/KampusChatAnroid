@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        FragmentHelper.changeFragment("Splash",supportFragmentManager)
+        FragmentHelper.changeFragment("Splash",supportFragmentManager,1)
 
 
 

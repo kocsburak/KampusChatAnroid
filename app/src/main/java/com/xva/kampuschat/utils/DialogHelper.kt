@@ -8,13 +8,17 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.xva.kampuschat.R
 import com.xva.kampuschat.entities.Profile
-import com.xva.kampuschat.entities.User
+
 import com.xva.kampuschat.interfaces.IDatePicker
 import com.xva.kampuschat.interfaces.IProcessDialog
 import com.xva.kampuschat.interfaces.IShuffleDialog
+import kotlinx.android.synthetic.main.dialog_matched.view.*
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -39,7 +43,7 @@ class DialogHelper(var context: Context) {
         progressDialog.dismiss()
     }
 
-    public fun process(processList: Array<String>, listener: IProcessDialog,title:String) {
+    public fun process(processList: Array<String>, listener: IProcessDialog, title: String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
         builder.setItems(processList) { _, which ->
@@ -56,12 +60,33 @@ class DialogHelper(var context: Context) {
         processDialog.dismiss()
     }
 
-    public fun shuffle(user: User, listener: IShuffleDialog) {
+    public fun shuffle(user: Profile, listener: IShuffleDialog) {
 
         val inflater = LayoutInflater.from(context)
         var view = inflater.inflate(R.layout.dialog_shuffle, null)
         var cancelButton = view.findViewById<ImageView>(R.id.CancelButton)
         var chatButton = view.findViewById<Button>(R.id.StartChatButton)
+
+        var fullname  = view.findViewById<TextView>(R.id.Fullname)
+        var username  = view.findViewById<TextView>(R.id.Username)
+        var department  = view.findViewById<TextView>(R.id.Department)
+        var gender  = view.findViewById<TextView>(R.id.Gender)
+        var age  = view.findViewById<TextView>(R.id.Age)
+
+
+        fullname.text = user.fullname
+        username.text = user.username
+        department.text = user.department_name
+
+        if(user.gender == "M"){
+            gender.text = context.getString(R.string.text_male)
+        }else{
+            gender.text = context.getString(R.string.text_female)
+        }
+
+        var count = getAge(user.date_of_birth)
+        age.text = count.toString()
+
 
         cancelButton.setOnClickListener {
             shuffleDismiss()
@@ -75,10 +100,47 @@ class DialogHelper(var context: Context) {
 
         shuffleDialog = Dialog(context)
         shuffleDialog.setContentView(view)
+
         shuffleDialog.setCancelable(false)
         shuffleDialog.show()
 
     }
+
+    private fun getAge(dobString: String): Int {
+
+        var date: Date? = null
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        try {
+            date = sdf.parse(dobString)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        if (date == null) return 0
+
+        val dob = Calendar.getInstance()
+        val today = Calendar.getInstance()
+
+        dob.setTime(date)
+
+        val year = dob.get(Calendar.YEAR)
+        val month = dob.get(Calendar.MONTH)
+        val day = dob.get(Calendar.DAY_OF_MONTH)
+
+        dob.set(year, month + 1, day)
+
+        var age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR)
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--
+        }
+
+
+
+        return age
+    }
+
+
 
     public fun shuffleDismiss() {
         shuffleDialog.dismiss()
@@ -93,6 +155,14 @@ class DialogHelper(var context: Context) {
             matchedDismiss()
         }
 
+        view.fullname.text = profile.fullname
+        view.username.text = profile.username
+        view.department.text = profile.department_name
+
+
+        if(profile.profile_photo_url != null){
+            view.profilePhoto.setImageBitmap(PhotoHelper.getBitmap(profile!!.profile_photo_url!!))
+        }
 
         matchedDialog = Dialog(context)
         matchedDialog.setContentView(view)
@@ -106,26 +176,43 @@ class DialogHelper(var context: Context) {
         matchedDialog.dismiss()
     }
 
-
-    public fun datePicker(listener:IDatePicker){
+    public fun datePicker(listener: IDatePicker) {
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        val picker = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            // Display Selected date in TextView
+        val picker = DatePickerDialog(
+            context,
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                // Display Selected date in TextView
 
-            listener.onSelectTime(year,monthOfYear,dayOfMonth)
+                var monthDate = "" + (monthOfYear + 1)
+                var dayDate = dayOfMonth.toString()
 
-        }, year, month, day)
+                if (monthOfYear + 1 < 10) {
+
+                    monthDate = "0" + (monthOfYear + 1)
+
+                }
+
+                if (dayOfMonth < 10) {
+                    dayDate = "0$dayOfMonth"
+                }
+
+
+                listener.onSelectTime(year.toString(), monthDate, dayDate)
+
+            },
+            year,
+            month,
+            day
+        )
         picker.show()
 
     }
 
 
-
-
-    }
+}
 
 

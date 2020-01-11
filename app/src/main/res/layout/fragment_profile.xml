@@ -20,11 +20,13 @@
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_marginTop="32dp"
-            android:background="@color/colorGray"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/colorGray"
+            android:src="@color/colorGray"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/include3" />
 
         <TextView
             android:id="@+id/Fullname"
@@ -84,108 +86,137 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:fontFamily="casual"
+            android:gravity="center"
             android:text="@string/text_informations"
             android:textSize="25sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/view6"
             app:layout_constraintStart_toStartOf="@+id/view6"
             app:layout_constraintTop_toBottomOf="@+id/view6" />
-
-
 
 
         <TextView
             android:id="@+id/Department"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="casual"
+            android:singleLine="true"
             android:text="@string/text_department_name"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/view6"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
 
         <TextView
             android:id="@+id/Age"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="casual"
+            android:singleLine="true"
             android:text="@string/text_department_name"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/view6"
-            app:layout_constraintTop_toBottomOf="@+id/Gender" />
-
-
+            app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
         <TextView
             android:id="@+id/Gender"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="casual"
+            android:singleLine="true"
             android:text="@string/text_department_name"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/view6"
-            app:layout_constraintTop_toBottomOf="@+id/Email" />
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
         <TextView
             android:id="@+id/Email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="casual"
+            android:singleLine="true"
             android:text="@string/text_department_name"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/view6"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+
+        <include
+            android:id="@+id/include3"
+            layout="@layout/header_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_department_name"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/textView4"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_email"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/textView4"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/Department" />
 
 
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/textView14"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="casual"
-            android:text="@string/text_bio"
-            android:textSize="25sp"
+            android:text="@string/text_age"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textView4"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/view6"
-            app:layout_constraintTop_toBottomOf="@+id/view7" />
-
-
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/Gender" />
 
         <TextView
-            android:id="@+id/Bio"
+            android:id="@+id/textView13"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="@string/app_slogan"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_gender"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/view6"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintEnd_toEndOf="@+id/textView4"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/Email" />
 
 
 

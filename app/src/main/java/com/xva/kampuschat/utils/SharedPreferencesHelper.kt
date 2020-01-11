@@ -3,6 +3,7 @@ package com.xva.kampuschat.utils
 import android.content.Context
 import android.content.SharedPreferences
 import com.xva.kampuschat.entities.AccessToken
+import com.xva.kampuschat.entities.Event
 
 class SharedPreferencesHelper {
 
@@ -27,20 +28,33 @@ class SharedPreferencesHelper {
     }
 
     fun getEmail(): String {
-        return pref.getString("email","")
+        return pref.getString("email", "")
     }
 
 
-    fun saveAccessToken(accessToken: AccessToken) {
+    fun saveAccessToken(accessToken: AccessToken?) {
 
-        editor.putString("token_type", accessToken.token_type)
-        editor.putString("expires_in", accessToken.expires_in)
-        editor.putString("access_token", accessToken.access_token)
-        editor.putString("refresh_token", accessToken.refresh_token)
+        editor.putString("token_type", accessToken!!.token_type)
+        editor.putString("expires_in", accessToken!!.expires_in)
+        editor.putString("access_token", accessToken!!.access_token)
+        editor.putString("refresh_token", accessToken!!.refresh_token)
 
         editor.commit()
 
     }
+
+    fun deleteAccessToken(){
+
+        editor.putString("token_type",null)
+        editor.putString("expires_in", null)
+        editor.putString("access_token", null)
+        editor.putString("refresh_token", null)
+
+        editor.commit()
+
+
+    }
+
 
     fun getAccessToken(): AccessToken {
 
@@ -50,6 +64,32 @@ class SharedPreferencesHelper {
             pref.getString("access_token", ""),
             pref.getString("refresh_token", "")
         )
+
+    }
+
+    fun saveEvent(event: Event?) {
+
+        editor.putInt("event_id", event!!.id)
+        editor.putInt("event_user_id", event!!.user_id)
+        editor.putInt("event_group", event!!.group)
+        editor.putBoolean("event_is_online", event!!.is_online)
+        editor.putString("event_last_seen_at", event!!.last_seen_at)
+        editor.commit()
+    }
+
+    fun getEvent(): Event {
+
+        var event = Event()
+        event.id = pref.getInt("event_id", -1)
+        event.user_id = pref.getInt("event_user_id", -1)
+        event.group = pref.getInt("event_group", -1)
+        event.is_online = pref.getBoolean("event_is_online", false)
+        event.last_seen_at = pref.getString("event_last_seen_at", "")
+        event.created_at = ""
+        event.updated_at = ""
+
+
+        return event
 
     }
 

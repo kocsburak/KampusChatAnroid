@@ -10,6 +10,7 @@
     <string name="text_password">Password</string>
     <string name="text_confirm_password">Confirm Password</string>
     <string name="text_gender">Gender</string>
+    <string name="text_age">Age</string>
     <string name="text_select_gender">Select Gender</string>
     <string name="text_date_of_birth">Date of Birth</string>
     <string name="text_forgot_password">Forgot Password?</string>
@@ -42,9 +43,20 @@
     <string name="text_match">Match</string>
     <string name="text_matched">You Are Matched !</string>
     <string name="text_start_chat">Start Chat</string>
+    <string name="text_shuffle_right_is_done">Your Shuffle Right is Done</string>
+    <string name="text_edit_profile">Edit Profile</string>
+    <string name="text_update_password">Update Password</string>
+    <string name="text_logout">Logout</string>
+
+
 
     <string name="text_please_wait">Please Wait...</string>
     <string name="text_choose_process">Choose a Process</string>
+    <string name="text_ban">Ban User</string>
+    <string name="text_remove_ban">Remove Ban</string>
+    <string name="text_send_message">Send Message</string>
+    <string name="text_show_profile">Show Profile</string>
+    <string name="text_default_bio">Hey , This is KampusChat</string>
 
     <string name="error_field_blank">This field cannot be blank</string>
     <string name="error_credentials_invalid">Credentials are invalid</string>
@@ -59,4 +71,5 @@
     <string name="error_select_date_of_birth">Select Date Of Birth</string>
     <string name="error_code_invalid">Code is invalid</string>
     <string name="error_email_not_found">Email is not found</string>
+    <string name="error_nobody_is_found">Nobody is Found</string>
 </resources>

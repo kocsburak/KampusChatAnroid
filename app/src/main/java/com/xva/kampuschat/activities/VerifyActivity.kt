@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.xva.kampuschat.R
+import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.interfaces.ApiService
 import com.xva.kampuschat.utils.DialogHelper
 import com.xva.kampuschat.utils.SharedPreferencesHelper
@@ -28,6 +29,8 @@ class VerifyActivity : AppCompatActivity(), Callback<String> {
 
         sharedPreferences = SharedPreferencesHelper(this)
         dialogHelper = DialogHelper(this)
+        service =
+            RetrofitBuilder.createServiceWithAuth(ApiService::class.java, sharedPreferences)
 
         DoneButton.setOnClickListener {
 
@@ -68,14 +71,18 @@ class VerifyActivity : AppCompatActivity(), Callback<String> {
     override fun onFailure(call: Call<String>, t: Throwable) {
         Toast.makeText(this, getString(R.string.error_something_wrong), Toast.LENGTH_LONG)
             .show()
+        dialogHelper.progressDismiss()
     }
 
     override fun onResponse(call: Call<String>, response: Response<String>) {
-        if (response.code() == 204) {
+        if (response.isSuccessful) {
             startActivity(Intent(this,HomeActivity::class.java))
+            this.finish()
         }else{
+
             Code.error = getString(R.string.error_code_invalid)
         }
+        dialogHelper.progressDismiss()
     }
 
 
