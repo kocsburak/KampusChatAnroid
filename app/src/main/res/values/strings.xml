@@ -49,14 +49,21 @@
     <string name="text_logout">Logout</string>
 
 
-
     <string name="text_please_wait">Please Wait...</string>
     <string name="text_choose_process">Choose a Process</string>
     <string name="text_ban">Ban User</string>
     <string name="text_remove_ban">Remove Ban</string>
+    <string name="text_you_are_banned">You are banned by this user</string>
     <string name="text_send_message">Send Message</string>
     <string name="text_show_profile">Show Profile</string>
     <string name="text_default_bio">Hey , This is KampusChat</string>
+
+
+    <string name="text_notification_title">Message Has Arrived</string>
+    <string name="text_notification">You Have an Message! Check it Out Now</string>
+
+
+    <string name="text_sended_a_photo">Sended A Photo</string>
 
     <string name="error_field_blank">This field cannot be blank</string>
     <string name="error_credentials_invalid">Credentials are invalid</string>

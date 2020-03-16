@@ -1,6 +1,7 @@
 package com.xva.kampuschat.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,32 +10,34 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xva.kampuschat.R
 import com.xva.kampuschat.adapters.ChatListAdapter
-
 import com.xva.kampuschat.api.RetrofitBuilder
-import com.xva.kampuschat.entities.Profile
+import com.xva.kampuschat.entities.Chat
+import com.xva.kampuschat.entities.Message
 import com.xva.kampuschat.interfaces.ApiService
-import com.xva.kampuschat.interfaces.ILike
+import com.xva.kampuschat.interfaces.IProcessCompleted
 import com.xva.kampuschat.interfaces.IProcessDialog
-import com.xva.kampuschat.utils.DialogHelper
-import com.xva.kampuschat.utils.FragmentHelper
-import com.xva.kampuschat.utils.LikeHelper
-import com.xva.kampuschat.utils.SharedPreferencesHelper
+import com.xva.kampuschat.utils.*
 import kotlinx.android.synthetic.main.fragment_lists.view.*
 import kotlinx.android.synthetic.main.header_back.view.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
-class ChatList : Fragment()  , Callback<List<Profile>> , ChatListAdapter.ItemClickListener , IProcessDialog , ILike {
 
+class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickListener,
+    IProcessDialog, IProcessCompleted {
 
 
     private lateinit var mView: View
     private lateinit var apiService: ApiService
     private lateinit var dialogHelper: DialogHelper
-    private lateinit var call: Call<List<Profile>>
+    private lateinit var call: Call<List<Chat>>
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
-    private lateinit var profiles: List<Profile>
+    private lateinit var chats: ArrayList<Chat>
     private lateinit var adapter: ChatListAdapter
 
     private var listPosition = 0
@@ -55,17 +58,17 @@ class ChatList : Fragment()  , Callback<List<Profile>> , ChatListAdapter.ItemCli
 
         mView.BackButton.setOnClickListener {
 
-            FragmentHelper.changeFragment("Shuffle",activity!!.supportFragmentManager,1)
+            FragmentHelper.changeFragment("Shuffle", activity!!.supportFragmentManager, 1)
 
         }
 
+        chats = ArrayList()
         getChats()
         return mView
     }
 
 
-
-    private fun getChats(){
+    private fun getChats() {
 
         dialogHelper.progress()
         call = apiService.getChats(sharedPreferencesHelper.getEvent().user_id)
@@ -73,22 +76,24 @@ class ChatList : Fragment()  , Callback<List<Profile>> , ChatListAdapter.ItemCli
     }
 
 
-    override fun onFailure(call: Call<List<Profile>>, t: Throwable) {
+    override fun onFailure(call: Call<List<Chat>>, t: Throwable) {
         dialogHelper.progressDismiss()
         Toast.makeText(activity!!, getString(R.string.error_something_wrong), Toast.LENGTH_LONG)
             .show()
     }
 
-    override fun onResponse(call: Call<List<Profile>>, response: Response<List<Profile>>) {
+    override fun onResponse(call: Call<List<Chat>>, response: Response<List<Chat>>) {
         if (response.isSuccessful) {
 
             if (response.code() == 200) {
 
-                profiles = response.body()!!
 
+                var list = response.body()!!
 
+                setupArrayList(list)
                 setupAdapter()
                 setupProcessList()
+                startEventBus()
 
             }
 
@@ -106,9 +111,22 @@ class ChatList : Fragment()  , Callback<List<Profile>> , ChatListAdapter.ItemCli
         dialogHelper.progressDismiss()
     }
 
+
+    private fun setupArrayList(list: List<Chat>) {
+
+        for (item in list) {
+
+            if (!(item.did_i_banned_user)) {
+                chats.add(item)
+                Log.e("User", item.fullname)
+            }
+
+        }
+    }
+
     private fun setupAdapter() {
 
-        adapter = ChatListAdapter(activity!!, profiles, this)
+        adapter = ChatListAdapter(activity!!, chats, this)
         var linearLayoutManager = LinearLayoutManager(activity!!)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         mView.Lists.layoutManager = linearLayoutManager
@@ -121,7 +139,7 @@ class ChatList : Fragment()  , Callback<List<Profile>> , ChatListAdapter.ItemCli
     private fun setupProcessList() {
 
         processList = Array(1) { "" }
-        processList[0] = (getString(R.string.text_like))
+        processList[0] = (getString(R.string.text_ban))
 
     }
 
@@ -129,28 +147,93 @@ class ChatList : Fragment()  , Callback<List<Profile>> , ChatListAdapter.ItemCli
     override fun onItemClick(view: View, position: Int) {
         listPosition = position
 
-        if(!profiles[position].liked_each_other){
+        if (chats[listPosition].notification_signal == 1) {
+            EventBus.getDefault()
+                .postSticky(EventBusHelper.sendChatInformations(chats[listPosition]))
+            FragmentHelper.changeFragment("Message",activity!!.supportFragmentManager,0)
+        } else {
             dialogHelper.process(processList, this, getString(R.string.text_choose_process))
         }
-        
+
     }
 
     override fun onItemClicked(position: Int) {
-       likeUser()
+        banUser()
     }
 
-    private fun likeUser(){
+    private fun banUser() {
         dialogHelper.progress()
-        var likeHelper = LikeHelper(activity!!,this)
-        likeHelper.likeUser(profiles[listPosition].id)
+        var banHelper = BanHelper(activity!!, this)
+
+        if (sharedPreferencesHelper.getEvent().user_id == chats[listPosition].owner_user_id) {
+            banHelper.ban(chats[listPosition].guest_user_id)
+        } else {
+            banHelper.ban(chats[listPosition].owner_user_id)
+        }
+
+
     }
 
-    override fun liked(code: Int) {
-
-        if(code == 1){
-            dialogHelper.matched(profiles[listPosition])
-        }
+    // user is banned
+    override fun completed() {
+        chats.removeAt(listPosition)
         dialogHelper.progressDismiss()
+    }
+
+    private fun startEventBus() {
+        EventBus.getDefault().register(this)
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+
+    @Subscribe(sticky = true)
+    internal fun onDataEvent(data: EventBusHelper.sendNewMessages) {
+        if (data.messages.size > 0) {
+            setNewMessages(data.messages)
+        }
+
+    }
+
+    private fun setNewMessages(messages: ArrayList<Message>) {
+
+
+        for (message in messages) {
+
+            for (chat in chats) {
+
+                if (message.chat_id == chat.id) {
+                    chat.notification_signal = 1
+                    chat.message_update_time = message.created_at
+                    if (message.type == "Photo") {
+                        chat.last_message = getString(R.string.text_sended_a_photo)
+                    } else {
+                        chat.last_message = message.message
+                    }
+
+                }
+
+            }
+
+
+        }
+
+        sortList()
+        adapter.notifyDataSetChanged()
+
+
+    }
+
+
+    private fun sortList() {
+        chats.sortWith(Comparator { lhs, rhs ->
+
+            if (lhs.message_update_time > rhs.message_update_time) -1 else if (lhs.message_update_time < rhs.message_update_time) 1 else 0
+        })
 
 
     }

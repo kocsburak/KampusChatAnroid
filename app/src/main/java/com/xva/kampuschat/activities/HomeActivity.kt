@@ -18,6 +18,14 @@ import org.greenrobot.eventbus.Subscribe
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.xva.kampuschat.services.NotificationService
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Intent
+
+
+
+
 
 class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
     Callback<Event> {
@@ -52,14 +60,34 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
+        EventBus.getDefault().postSticky(EventBusHelper.updateNotificationPermission(false))
         onlineHelper.setOnline()
+        checkIfNotificationServiceisRunning()
 
     }
 
     override fun onStop() {
         super.onStop()
+        EventBus.getDefault().postSticky(EventBusHelper.updateNotificationPermission(true))
         EventBus.getDefault().unregister(this)
         onlineHelper.setOffline()
+        checkIfNotificationServiceisRunning()
+    }
+
+
+    private fun checkIfNotificationServiceisRunning(){
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.runningAppProcesses) {
+            if (NotificationService::class.java.name != service.processName) {
+                startNotificationServices()
+            }
+        }
+
+    }
+
+    private fun startNotificationServices(){
+        val intent = Intent(this, NotificationService::class.java)
+        startService(intent)
     }
 
 
@@ -72,7 +100,7 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private fun handleBottomNavigation(fragment: String) {
 
 
-        if (fragment == "Profile" || fragment == "Shuffle" || fragment == "Likes" || fragment == "Bans") {
+        if (fragment == "Profile" || fragment == "Shuffle" || fragment == "Bans") {
 
             bottom.visibility = View.VISIBLE
         } else {
@@ -96,7 +124,7 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when (p0!!.itemId) {
 
             R.id.navigation_lists -> {
-                FragmentHelper.changeFragment("Likes", supportFragmentManager,1)
+                FragmentHelper.changeFragment("Bans", supportFragmentManager,1)
 
                 return true
             }

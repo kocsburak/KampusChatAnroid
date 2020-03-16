@@ -20,7 +20,7 @@
 
     <include
         android:id="@+id/include2"
-        layout="@layout/header_likes_bans"
+        layout="@layout/header_shuffle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

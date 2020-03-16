@@ -16,7 +16,7 @@ class ListsAdapter : RecyclerView.Adapter<ListsAdapter.MyViewHolder> {
 
 
 
-    var list: List<Profile>? = null
+    var list: ArrayList<Profile>? = null
     var inflater: LayoutInflater? = null
     var itemClickListener: ItemClickListener
 
@@ -24,7 +24,7 @@ class ListsAdapter : RecyclerView.Adapter<ListsAdapter.MyViewHolder> {
 
     constructor(
         context: Context,
-        profiles: List<Profile>,
+        profiles: ArrayList<Profile>,
         itemClickListener: ItemClickListener
     ) {
         inflater = LayoutInflater.from(context)
@@ -49,6 +49,10 @@ class ListsAdapter : RecyclerView.Adapter<ListsAdapter.MyViewHolder> {
         return list!!.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position as Long
+    }
+
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -63,7 +67,7 @@ class ListsAdapter : RecyclerView.Adapter<ListsAdapter.MyViewHolder> {
             this.department.text = profile.department_name
 
 
-            if(profile.profile_photo_url != null && profile.profile_photo_url != ""){
+            if(profile.profile_photo_url != null && profile.profile_photo_url != "" && profile.profile_photo_url != "forbidden"){
                 pp.setImageBitmap(PhotoHelper.getBitmap(profile.profile_photo_url!!))
             }
 

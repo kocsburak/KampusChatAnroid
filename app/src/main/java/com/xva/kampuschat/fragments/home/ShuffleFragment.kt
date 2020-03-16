@@ -1,6 +1,7 @@
 package com.xva.kampuschat.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,8 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>, ISh
 
     private var shuffle_count = 3
     private var matched_user: Profile? = null
+
+    private var data_count = -1;
 
 
     override fun onCreateView(
@@ -83,9 +86,9 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>, ISh
     private fun shuffle() {
 
         if (shuffle_count > 0) {
-
+            Log.e("cc",data_count.toString())
             dialogHelper.progress()
-            call = apiService.shuffle(sharedPreferencesHelper.getEvent().user_id)
+            call = apiService.shuffle(sharedPreferencesHelper.getEvent().user_id,data_count)
             call.enqueue(this)
 
         } else {
@@ -133,6 +136,8 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>, ISh
 
                 shuffle_count--
                 matched_user = response.body()!!
+                data_count = matched_user!!.count
+                Log.e("cc",data_count.toString())
                 sendUserToDialog()
 
             }
@@ -168,7 +173,7 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>, ISh
 
     override fun completed() {
         dialogHelper.progressDismiss()
-        FragmentHelper.changeFragment("Chat",activity!!.supportFragmentManager,1)
+        FragmentHelper.changeFragment("ChatList",activity!!.supportFragmentManager,1)
     }
 
 }

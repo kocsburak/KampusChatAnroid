@@ -1,8 +1,6 @@
 package com.xva.kampuschat.utils
 
-import com.xva.kampuschat.entities.Department
-import com.xva.kampuschat.entities.Profile
-import com.xva.kampuschat.entities.University
+import com.xva.kampuschat.entities.*
 
 class EventBusHelper {
 
@@ -12,5 +10,8 @@ class EventBusHelper {
     internal class publishFragment(var name:String)
     internal class sendProfile(var profile: Profile?)
     internal class updateProfile(var url:String)
+    internal class updateNotificationPermission(var permission : Boolean)
+    internal class sendNewMessages(var messages:ArrayList<Message>)
+    internal class sendChatInformations(var chat:Chat)
 
 }

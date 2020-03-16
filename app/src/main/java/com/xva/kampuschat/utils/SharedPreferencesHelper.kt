@@ -43,9 +43,9 @@ class SharedPreferencesHelper {
 
     }
 
-    fun deleteAccessToken(){
+    fun deleteAccessToken() {
 
-        editor.putString("token_type",null)
+        editor.putString("token_type", null)
         editor.putString("expires_in", null)
         editor.putString("access_token", null)
         editor.putString("refresh_token", null)
@@ -91,6 +91,17 @@ class SharedPreferencesHelper {
 
         return event
 
+    }
+
+    fun saveMessageLastDate(date: String) {
+
+        editor.putString("messageLastDate", date)
+        editor.commit()
+
+    }
+
+    fun getMessageLastDate(): String {
+        return pref.getString("messageLastDate", "2020-01-12 00:00:00");
     }
 
 

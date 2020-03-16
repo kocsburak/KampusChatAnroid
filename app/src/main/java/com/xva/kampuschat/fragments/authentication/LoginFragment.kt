@@ -88,7 +88,7 @@ class LoginFragment : Fragment(), View.OnClickListener, Callback<AccessToken>, I
         if (response.isSuccessful) {
             preferencesHelper.saveAccessToken(response.body()!!)
             preferencesHelper.saveEmail(mView.Username.text.toString())
-            checkUserVerify()
+            //checkUserVerify() // TODO : Burayı geri ekle
         } else {
             dialogHelper.progressDismiss()
             handleErrors(response.errorBody(), response.code())

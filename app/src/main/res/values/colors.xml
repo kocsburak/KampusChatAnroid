@@ -7,4 +7,6 @@
     <color name="colorGray">#C9C5C5</color>
     <color name="colorBlue">#2196F3</color>
 
+    <color name="colorBanned">#645656</color>
+
 </resources>

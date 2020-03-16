@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -60,4 +59,5 @@
         app:layout_constraintEnd_toStartOf="@+id/ItemSettings"
         app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
         app:layout_constraintTop_toBottomOf="@+id/Fullname" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

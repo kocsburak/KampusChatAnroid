@@ -107,7 +107,7 @@ class EditProfile : Fragment(), Callback<String> {
 
 
         if (imageUri != null) {
-
+            dialogHelper.progress()
             val imageStream = activity!!.contentResolver.openInputStream(imageUri!!)
             val selectedImage = BitmapFactory.decodeStream(imageStream)
 
@@ -118,7 +118,7 @@ class EditProfile : Fragment(), Callback<String> {
         }
 
         if (imageUri != null) {
-            dialogHelper.progress()
+
             call = apiService.updateProfile(
                 sharedPreferencesHelper.getEvent().user_id,
                 profile.profile_photo_url!!

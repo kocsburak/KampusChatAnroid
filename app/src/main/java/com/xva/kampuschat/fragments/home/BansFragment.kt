@@ -15,15 +15,17 @@ import com.xva.kampuschat.entities.Profile
 import com.xva.kampuschat.interfaces.ApiService
 import com.xva.kampuschat.interfaces.IProcessCompleted
 import com.xva.kampuschat.interfaces.IProcessDialog
-import com.xva.kampuschat.utils.*
+import com.xva.kampuschat.utils.BanHelper
+import com.xva.kampuschat.utils.DialogHelper
+import com.xva.kampuschat.utils.FragmentHelper
+import com.xva.kampuschat.utils.SharedPreferencesHelper
 import kotlinx.android.synthetic.main.fragment_lists.view.*
-import kotlinx.android.synthetic.main.header_likes_bans.view.*
-import org.greenrobot.eventbus.EventBus
+import kotlinx.android.synthetic.main.header_shuffle.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BansFragment: Fragment()  , Callback<List<Profile>> , ListsAdapter.ItemClickListener,
+class BansFragment : Fragment(), Callback<List<Profile>>, ListsAdapter.ItemClickListener,
     IProcessDialog, IProcessCompleted {
 
 
@@ -32,9 +34,9 @@ class BansFragment: Fragment()  , Callback<List<Profile>> , ListsAdapter.ItemCli
     private lateinit var dialogHelper: DialogHelper
     private lateinit var call: Call<List<Profile>>
     private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
-    private lateinit var profiles: List<Profile>
+    private lateinit var profiles: ArrayList<Profile>
     private lateinit var banHelper: BanHelper
-    private lateinit var  adapter: ListsAdapter
+    private lateinit var adapter: ListsAdapter
 
     private var listPosition = 0
 
@@ -56,11 +58,11 @@ class BansFragment: Fragment()  , Callback<List<Profile>> , ListsAdapter.ItemCli
         return mView
     }
 
-    private fun setClicks(){
+    private fun setClicks() {
 
-        mView.LikesListButton.setOnClickListener {
+        mView.ChatListButton.setOnClickListener {
 
-            FragmentHelper.changeFragment("Likes",activity!!.supportFragmentManager,1)
+            FragmentHelper.changeFragment("ChatList", activity!!.supportFragmentManager, 1)
         }
 
     }
@@ -87,9 +89,9 @@ class BansFragment: Fragment()  , Callback<List<Profile>> , ListsAdapter.ItemCli
 
             if (response.code() == 200) {
 
-                profiles = response.body()!!
+                var list = response.body()!!
 
-
+                setupArrayList(list)
                 setupAdapter()
                 setupProcessList()
 
@@ -110,6 +112,14 @@ class BansFragment: Fragment()  , Callback<List<Profile>> , ListsAdapter.ItemCli
     }
 
 
+    private fun setupArrayList(list: List<Profile>) {
+
+        for (item in list) {
+            profiles.add(item)
+        }
+
+    }
+
     private fun setupAdapter() {
 
         adapter = ListsAdapter(activity!!, profiles, this)
@@ -126,7 +136,6 @@ class BansFragment: Fragment()  , Callback<List<Profile>> , ListsAdapter.ItemCli
 
         processList = Array(1) { "" }
         processList[0] = (getString(R.string.text_remove_ban))
-
 
 
     }
@@ -163,11 +172,10 @@ class BansFragment: Fragment()  , Callback<List<Profile>> , ListsAdapter.ItemCli
 
 
     override fun completed() { // BAN user completed
-        profiles.drop(listPosition)
-        adapter.notifyItemChanged(listPosition)
+        profiles.removeAt(listPosition)
+        adapter.notifyDataSetChanged()
         dialogHelper.progressDismiss()
     }
-
 
 
 }

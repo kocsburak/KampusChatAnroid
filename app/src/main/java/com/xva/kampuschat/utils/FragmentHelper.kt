@@ -62,9 +62,6 @@ class FragmentHelper {
                     fragmentTransaction.replace(R.id.fragment_place_holder, ProfileFragment(code))
                 }
 
-                "Likes" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, LikesFragment())
-                }
 
                 "Bans" -> {
                     fragmentTransaction.replace(R.id.fragment_place_holder, BansFragment())
@@ -84,6 +81,10 @@ class FragmentHelper {
 
                 "ChatList" -> {
                     fragmentTransaction.replace(R.id.fragment_place_holder, ChatList())
+                }
+
+                "Message" -> {
+                    //fragmentTransaction.replace(R.id.fragment_place_holder,MessageFragment())
                 }
 
             }

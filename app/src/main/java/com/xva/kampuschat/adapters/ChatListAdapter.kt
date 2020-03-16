@@ -6,27 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.xva.kampuschat.R
-import com.xva.kampuschat.entities.Profile
+import com.xva.kampuschat.entities.Chat
 import com.xva.kampuschat.utils.PhotoHelper
 
-class ChatListAdapter  : RecyclerView.Adapter<ChatListAdapter.MyViewHolder>{
+class ChatListAdapter : RecyclerView.Adapter<ChatListAdapter.MyViewHolder> {
 
 
-    var list: List<Profile>? = null
+    var list: List<Chat>? = null
     var inflater: LayoutInflater? = null
     var itemClickListener: ItemClickListener
 
 
-
     constructor(
         context: Context,
-        profiles: List<Profile>,
+        chats: List<Chat>,
         itemClickListener: ItemClickListener
     ) {
         inflater = LayoutInflater.from(context)
-        this.list = profiles
+        this.list = chats
         this.itemClickListener = itemClickListener
 
     }
@@ -38,8 +38,8 @@ class ChatListAdapter  : RecyclerView.Adapter<ChatListAdapter.MyViewHolder>{
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val profile = list!![position]
-        holder.setData(profile, position, itemClickListener)
+        val chat = list!![position]
+        holder.setData(chat, position, itemClickListener)
 
     }
 
@@ -53,21 +53,56 @@ class ChatListAdapter  : RecyclerView.Adapter<ChatListAdapter.MyViewHolder>{
         var name: TextView = itemView.findViewById(R.id.Fullname) as TextView
         var department: TextView = itemView.findViewById(R.id.Deparment) as TextView
         var pp: ImageView = itemView.findViewById(R.id.ProfilePhoto) as ImageView
-        var settings  = itemView.findViewById<ImageView>(R.id.ItemSettings) as ImageView
+        var settings = itemView.findViewById<ImageView>(R.id.ItemSettings) as ImageView
+        var layout = itemView.findViewById<ConstraintLayout>(R.id.item_layout) as ConstraintLayout
 
-        fun setData(profile: Profile, position: Int, clickListener: ItemClickListener) {
+        fun setData(chat: Chat, position: Int, clickListener: ItemClickListener) {
 
-            this.name.text = profile.fullname
-            this.department.text = profile.department_name
+            this.name.text = chat.fullname
 
+            if (chat.did_user_banned_me) {
 
-            if(profile.profile_photo_url != null && profile.profile_photo_url != "" && profile.liked_each_other){
-                pp.setImageBitmap(PhotoHelper.getBitmap(profile.profile_photo_url!!))
+                layout.alpha = 0.5f
+                this.department.text = itemView.resources.getString(R.string.text_you_are_banned)
+
+            } else {
+                layout.alpha = 1f
+
+                if (chat.last_message.isNotEmpty()) {
+                    this.department.text = chat.last_message
+                } else {
+                    this.department.text = chat.department_name
+                }
+
             }
 
 
+
+            if (chat.profile_photo_url != null) {
+                pp.setImageBitmap(PhotoHelper.getBitmap(chat.profile_photo_url!!))
+            }
+
+
+            if (chat.notification_signal == 1) {
+
+                settings.setImageDrawable(
+                    itemView.resources.getDrawable(
+                        R.drawable.ic_notification_signal,
+                        itemView.resources.newTheme()
+                    )
+                )
+            } else {
+                settings.setImageDrawable(
+                    itemView.resources.getDrawable(
+                        R.drawable.ic_linear_scale_black_24dp,
+                        itemView.resources.newTheme()
+                    )
+                )
+            }
+
             settings.setOnClickListener {
-                clickListener.onItemClick(settings,position)
+
+                clickListener.onItemClick(settings, position)
             }
 
         }
@@ -78,7 +113,6 @@ class ChatListAdapter  : RecyclerView.Adapter<ChatListAdapter.MyViewHolder>{
     interface ItemClickListener {
         fun onItemClick(view: View, position: Int)
     }
-
 
 
 }

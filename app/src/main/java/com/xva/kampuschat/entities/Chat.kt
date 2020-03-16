@@ -2,37 +2,29 @@ package com.xva.kampuschat.entities
 
 import com.squareup.moshi.Json
 
-class Profile {
-
+class Chat {
 
 
     @Json(name = "id")
     var id = 0
 
-    @Json(name = "department_id")
-    var department_id = 0
+    @Json(name = "owner_user_id")
+    var owner_user_id = 0
 
+    @Json(name = "guest_user_id")
+    var guest_user_id = -1
 
-    @Json(name = "email")
-    lateinit var email:String
+    @Json(name = "is_checked")
+    var is_checked = false
 
-    @Json(name = "username")
-    lateinit var username:String
+    @Json(name = "is_owner_typing")
+    var is_owner_typing = false
+
+    @Json(name = "is_guest_typing")
+    var is_guest_typing = false
 
     @Json(name = "fullname")
     lateinit var fullname:String
-
-    @Json(name = "gender")
-    lateinit var gender:String
-
-    @Json(name = "date_of_birth")
-    lateinit var date_of_birth:String
-
-    @Json(name = "email_verified_at")
-    var email_verified_at : String? = null
-
-    @Json(name = "bio")
-    var bio:String? = null
 
     @Json(name = "profile_photo_url")
     var profile_photo_url:String? = null
@@ -45,21 +37,19 @@ class Profile {
 
     @Json(name = "department_name")
     var department_name:String? = null
+
     @Json(name = "did_user_banned_me")
-    var did_user_ban_me: Boolean = false
+    var did_user_banned_me: Boolean = false
 
     @Json(name = "did_i_banned_user")
-    var did_i_ban_user: Boolean = false
+    var did_i_banned_user: Boolean = false
 
     @Json(name = "liked_each_other")
     var liked_each_other: Boolean=false
 
-    @Json(name = "count")
-    var count = 0;
-
-
-
-
+    var notification_signal = 0
+    var message_update_time = "2020-01-01 00:00:00"
+    var last_message = ""
 
 
 }

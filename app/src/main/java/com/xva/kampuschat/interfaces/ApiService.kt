@@ -67,15 +67,15 @@ interface ApiService {
     fun setOffline(@Field("user_id") user_id: Number): Call<String>
 
 
-    @GET("shuffle/{user_id}")
-    fun shuffle(@Path("user_id") user_id: Number): Call<Profile>
+    @GET("shuffle/{user_id}/{count}")
+    fun shuffle(@Path("user_id") user_id: Number,@Path("count")count:Number): Call<Profile>
 
     @POST("addChat")
     @FormUrlEncoded
     fun addChat(@Field("owner_user_id") owner_user_id: Number, @Field("guest_user_id") guest_user_id: Number): Call<String>
 
     @GET("getChats/{user_id}")
-    fun getChats(@Path("user_id") user_id: Number): Call<List<Profile>>
+    fun getChats(@Path("user_id") user_id: Number): Call<List<Chat>>
 
     @GET("getLikedUsers/{user_id}")
     fun getLikes(@Path("user_id") user_id: Int): Call<List<Profile>>
@@ -84,7 +84,6 @@ interface ApiService {
     @POST("likeUser")
     @FormUrlEncoded
     fun likeUser(@Field("user_id") user_id: Number, @Field("liked_user_id") liked_user_id: Number): Call<String>
-
 
     @GET("getBannedUsers/{user_id}")
     fun getBans(@Path("user_id") user_id: Int): Call<List<Profile>>
@@ -106,6 +105,9 @@ interface ApiService {
     @PUT("updateProfile")
     @FormUrlEncoded
     fun updateProfile(@Field("user_id") user_id: Number, @Field("url") url: String?): Call<String>
+
+    @GET("checkNewMessages/{user_id}/{last_date}")
+    fun checkNewMessages(@Path("user_id")user_id:Int,@Path("last_date")last_date:String):Call<List<Message>>
 
 
 

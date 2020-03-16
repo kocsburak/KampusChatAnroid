@@ -1,11 +1,13 @@
 package com.xva.kampuschat.fragments.authentication
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.xva.kampuschat.R
+import com.xva.kampuschat.activities.HomeActivity
 import com.xva.kampuschat.interfaces.IVerify
 import com.xva.kampuschat.utils.FragmentHelper
 import com.xva.kampuschat.utils.SharedPreferencesHelper
@@ -40,7 +42,8 @@ class SplashFragment : Fragment(), IVerify {
             this.onDestroy()
 
         } else {
-            checkUserVerify()
+            //checkUserVerify() todo : Burayı geri ekle
+            startActivity(Intent(activity!!,HomeActivity::class.java)) // TODO : Email onaylamayı düzeltince burayı kaldır
         }
 
 
