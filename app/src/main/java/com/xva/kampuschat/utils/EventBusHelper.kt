@@ -11,7 +11,9 @@ class EventBusHelper {
     internal class sendProfile(var profile: Profile?)
     internal class updateProfile(var url:String)
     internal class updateNotificationPermission(var permission : Boolean)
-    internal class sendNewMessages(var messages:ArrayList<Message>)
+    internal class sendMessages(var messages:ArrayList<Message>?)
+    internal class sendMessagesToService(var messages: ArrayList<Message>?,var processCode:Int)
     internal class sendChatInformations(var chat:Chat)
+    internal class isTyping(var statue:Boolean)
 
 }

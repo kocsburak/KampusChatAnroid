@@ -116,7 +116,7 @@ class NotificationService : Service(), Callback<List<Message>> {
 
         }
 
-        EventBus.getDefault().postSticky(EventBusHelper.sendNewMessages(messages))
+        EventBus.getDefault().postSticky(EventBusHelper.sendMessages(messages))
 
     }
 

@@ -192,9 +192,9 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
 
 
     @Subscribe(sticky = true)
-    internal fun onDataEvent(data: EventBusHelper.sendNewMessages) {
-        if (data.messages.size > 0) {
-            setNewMessages(data.messages)
+    internal fun onDataEvent(data: EventBusHelper.sendMessages) {
+        if (data.messages!!.size > 0) {
+            setNewMessages(data.messages!!)
         }
 
     }

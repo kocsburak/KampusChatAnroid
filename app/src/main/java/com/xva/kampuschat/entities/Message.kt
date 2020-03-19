@@ -30,5 +30,7 @@ class Message {
     @Json(name = "updated_at")
     lateinit var updated_at : String
 
+    var is_process_completed = false
+
 
 }

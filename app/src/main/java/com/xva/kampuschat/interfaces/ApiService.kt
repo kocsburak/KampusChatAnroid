@@ -4,11 +4,6 @@ package com.xva.kampuschat.interfaces
 import com.xva.kampuschat.entities.*
 import retrofit2.Call
 import retrofit2.http.*
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
-import retrofit2.http.POST
-import retrofit2.http.Multipart
-
 
 
 interface ApiService {
@@ -60,15 +55,11 @@ interface ApiService {
 
     @PUT("setOnline")
     @FormUrlEncoded
-    fun setOnline(@Field("user_id") user_id: Number): Call<String>
-
-    @PUT("setOffline")
-    @FormUrlEncoded
-    fun setOffline(@Field("user_id") user_id: Number): Call<String>
+    fun updateOnlineStatus(@Field("user_id") user_id: Number, @Field("value") value: Boolean): Call<String>
 
 
     @GET("shuffle/{user_id}/{count}")
-    fun shuffle(@Path("user_id") user_id: Number,@Path("count")count:Number): Call<Profile>
+    fun shuffle(@Path("user_id") user_id: Number, @Path("count") count: Number): Call<Profile>
 
     @POST("addChat")
     @FormUrlEncoded
@@ -78,7 +69,7 @@ interface ApiService {
     fun getChats(@Path("user_id") user_id: Number): Call<List<Chat>>
 
     @GET("getLikedUsers/{user_id}")
-    fun getLikes(@Path("user_id") user_id: Int): Call<List<Profile>>
+    fun getLikes(@Path("user_id") user_id: Number): Call<List<Profile>>
 
 
     @POST("likeUser")
@@ -86,7 +77,7 @@ interface ApiService {
     fun likeUser(@Field("user_id") user_id: Number, @Field("liked_user_id") liked_user_id: Number): Call<String>
 
     @GET("getBannedUsers/{user_id}")
-    fun getBans(@Path("user_id") user_id: Int): Call<List<Profile>>
+    fun getBans(@Path("user_id") user_id: Number): Call<List<Profile>>
 
     @POST("banUser")
     @FormUrlEncoded
@@ -97,7 +88,7 @@ interface ApiService {
     fun removeBan(@Field("user_id") user_id: Number, @Field("banned_user_id") liked_user_id: Number): Call<String>
 
 
-   // @POST("updatePhoto")
+    // @POST("updatePhoto")
     //@FormUrlEncoded
     //fun updatePhoto(@Field("user_id") user_id: Number, @Field("image") image: String): Call<Photo>
 
@@ -106,13 +97,50 @@ interface ApiService {
     @FormUrlEncoded
     fun updateProfile(@Field("user_id") user_id: Number, @Field("url") url: String?): Call<String>
 
-    @GET("checkNewMessages/{user_id}/{last_date}")
-    fun checkNewMessages(@Path("user_id")user_id:Int,@Path("last_date")last_date:String):Call<List<Message>>
-
-
-
     @POST("logout")
     fun logout(): Call<String>
+
+
+    @GET("checkNewMessages/{user_id}/{last_date}")
+    fun checkNewMessages(@Path("user_id") user_id: Number, @Path("last_date") last_date: String): Call<List<Message>>
+
+
+    @GET("getAllMessages/{chat_id}")
+    fun getAllMessages(@Path("chat_id") chat_id: Number): Call<List<Message>>
+
+    @GET("getNewMessages/{chat_id}/{user_id}/{last_date}")
+    fun getNewMessages(@Path("chat_id") chat_id: Number, @Path("user_id") user_id: Number, @Path("last_date") last_date: String): Call<List<Message>>
+
+    @GET("checkUserTyping/{chat_id}/{user_id}")
+    fun checkIfUserTyping(@Path("chat_id") chat_id: Number, @Path("user_id") user_id: Number): Call<String>
+
+    @PUT("setUserTypingValue")
+    @FormUrlEncoded
+    fun setUserTypingValue(
+        @Field("chat_id") chat_id: Number, @Field("user_id") user_id: Number, @Field(
+            "value"
+        ) value: Boolean
+    ): Call<String>
+
+    @POST("sendMessage")
+    @FormUrlEncoded
+    fun sendMessage(
+        @Field("chat_id") chat_id: Number, @Field("user_id") user_id: Number, @Field("type") type: String, @Field(
+            "message"
+        ) message: String
+    ): Call<String>
+
+
+    @GET("isMessageSeen/{message_id}")
+    fun isMessageSeen(@Path("message_id") message_id: Number): Call<String>
+
+    @PUT("setIsMessageSeenValue")
+    @FormUrlEncoded
+    fun updateMessageSeenValue(@Field("message_id") message_id: Number): Call<String>
+
+
+    @GET("checkIfUserIsOnline/{user_id}")
+    fun checkIfUserIsOnline(@Path("user_id") user_id: Number): Call<String>
 
 
 }

@@ -64,6 +64,7 @@
 
 
     <string name="text_sended_a_photo">Sended A Photo</string>
+    <string name="text_message">Message</string>
 
     <string name="error_field_blank">This field cannot be blank</string>
     <string name="error_credentials_invalid">Credentials are invalid</string>
