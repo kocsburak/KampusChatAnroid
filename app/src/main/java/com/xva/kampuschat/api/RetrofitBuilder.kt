@@ -1,7 +1,7 @@
 package com.xva.kampuschat.api
 
-import com.xva.kampuschat.interfaces.ApiService
-import com.xva.kampuschat.utils.SharedPreferencesHelper
+import com.xva.kampuschat.interfaces.api.ApiService
+import com.xva.kampuschat.helpers.datahelper.SharedPreferencesHelper
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response

@@ -66,6 +66,11 @@
     <string name="text_sended_a_photo">Sended A Photo</string>
     <string name="text_message">Message</string>
 
+    <string name="text_online">Online</string>
+    <string name="text_offline">Offline</string>
+    <string name="text_typing">Typing...</string>
+
+
     <string name="error_field_blank">This field cannot be blank</string>
     <string name="error_credentials_invalid">Credentials are invalid</string>
     <string name="error_something_wrong">Something went wrong</string>

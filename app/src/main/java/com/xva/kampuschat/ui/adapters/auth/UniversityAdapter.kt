@@ -1,0 +1,71 @@
+package com.xva.kampuschat.ui.adapters.auth
+
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.xva.kampuschat.R
+import com.xva.kampuschat.entities.auth.University
+
+
+class UniversityAdapter : RecyclerView.Adapter<UniversityAdapter.MyViewHolder> {
+
+
+    var list: List<University>? = null
+    var inflater: LayoutInflater? = null
+    var itemClickListener: ItemClickListener
+
+
+    constructor(
+        context: Context,
+        universities: List<University>,
+        itemClickListener: ItemClickListener
+    ) {
+        inflater = LayoutInflater.from(context)
+        this.list = universities
+        this.itemClickListener = itemClickListener
+
+    }
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val view = inflater!!.inflate(R.layout.item_university, parent, false)
+        return MyViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val university = list!![position]
+        holder.setData(university, position, itemClickListener)
+
+    }
+
+    override fun getItemCount(): Int {
+        return list!!.size
+    }
+
+
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        var name: TextView = itemView.findViewById(R.id.textViewName) as TextView
+
+
+        fun setData(university: University, position: Int, clickListener: ItemClickListener) {
+
+            this.name.text = university.name
+            itemView.setOnClickListener {
+                clickListener.onItemClick(itemView, position)
+            }
+        }
+
+    }
+
+
+    interface ItemClickListener {
+        fun onItemClick(view: View, position: Int)
+    }
+
+
+}

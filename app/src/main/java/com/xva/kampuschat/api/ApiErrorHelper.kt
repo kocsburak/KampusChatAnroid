@@ -1,6 +1,6 @@
 package com.xva.kampuschat.api
 
-import com.xva.kampuschat.entities.ApiError
+import com.xva.kampuschat.entities.api.ApiError
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import java.io.IOException
