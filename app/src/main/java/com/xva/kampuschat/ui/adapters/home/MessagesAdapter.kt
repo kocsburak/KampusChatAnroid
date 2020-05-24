@@ -10,7 +10,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.xva.kampuschat.R
 import com.xva.kampuschat.entities.home.Message
-import com.xva.kampuschat.helpers.photohelper.Picasso
+import com.xva.kampuschat.helpers.photohelper.PhotoHelper
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
 
@@ -77,8 +79,9 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
 
         private fun sender(message: Message, clickListener: ItemClickListener) {
 
+            var layout = itemView.findViewById(R.id.TextLayout) as ConstraintLayout
             var text = itemView.findViewById(R.id.SenderMessage) as TextView
-            var photo = itemView.findViewById(R.id.SenderPhoto) as ImageView
+            var photo = itemView.findViewById(R.id.Photo) as ImageView
             var date = itemView.findViewById<TextView>(R.id.SenderDate)
 
             if (message.type == "Text") {
@@ -87,11 +90,11 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
 
             } else {
 
-                text.visibility = View.GONE
-                date.visibility = View.GONE
+                layout.visibility = View.GONE
 
+                photo.visibility = View.VISIBLE
 
-                Picasso.loadPhoto(message.message, photo)
+                photo.setImageBitmap(PhotoHelper.getBitmap(message.message))
 
                 photo.setOnClickListener {
 
@@ -103,35 +106,34 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
 
             }
 
-            var seen = itemView.findViewById(R.id.Seen) as ImageView
+
+            var seen = itemView.findViewById(R.id.SenderSeen) as TextView
+
+
+            if (message.is_sended) {
+
+                seen.text = itemView.resources.getString(R.string.text_sended)
+
+
+            }
+
+
 
             if (message.is_seen) {
 
 
-                seen.setImageDrawable(
-                    itemView.resources.getDrawable(
-                        R.drawable.ic_check_blue,
-                        itemView.resources.newTheme()
-                    )
-                )
-
-            } else {
-                seen.setImageDrawable(
-                    itemView.resources.getDrawable(
-                        R.drawable.ic_check_white,
-                        itemView.resources.newTheme()
-                    )
-                )
+                seen.text = itemView.resources.getString(R.string.text_seen)
 
             }
 
-            date.text = message.created_at
+            date.text = getDate(message.created_at)
 
 
         }
 
         private fun receiver(message: Message, clickListener: ItemClickListener) {
 
+            var layout = itemView.findViewById(R.id.ReceiverTextLayout) as ConstraintLayout
             var text = itemView.findViewById<TextView>(R.id.ReceiverMessage)
             var photo = itemView.findViewById(R.id.ReceiverPhoto) as ImageView
             var date = itemView.findViewById<TextView>(R.id.ReceiverDate)
@@ -142,20 +144,34 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
 
             } else {
 
-                text.visibility = View.GONE
-                date.visibility = View.GONE
+                layout.visibility = View.GONE
 
-                Picasso.loadPhoto(message.message, photo)
+                photo.visibility = View.VISIBLE
+
+                photo.setImageBitmap(PhotoHelper.getBitmap(message.message))
 
                 photo.setOnClickListener {
 
                     clickListener.onItemClick(message.message)
 
+
                 }
+
 
             }
 
-            date.text = message.created_at
+            date.text = getDate(message.created_at)
+
+        }
+
+
+        private fun getDate(date: String): String {
+
+            var input = SimpleDateFormat("Y-M-D H:m:s", Locale.getDefault())
+            var output = SimpleDateFormat("H:m", Locale.getDefault())
+            var d = input.parse(date)
+
+            return output.format(d)
 
         }
 

@@ -10,14 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xva.kampuschat.MainActivity
 import com.xva.kampuschat.R
-import com.xva.kampuschat.ui.adapters.home.SettingsAdapter
 import com.xva.kampuschat.api.RetrofitBuilder
-import com.xva.kampuschat.interfaces.api.ApiService
+import com.xva.kampuschat.helpers.datahelper.EventBusHelper
+import com.xva.kampuschat.helpers.datahelper.SharedPreferencesHelper
+import com.xva.kampuschat.helpers.eventhelper.SetOnline
 import com.xva.kampuschat.helpers.uihelper.DialogHelper
 import com.xva.kampuschat.helpers.uihelper.FragmentHelper
-import com.xva.kampuschat.helpers.datahelper.SharedPreferencesHelper
+import com.xva.kampuschat.interfaces.api.ApiService
+import com.xva.kampuschat.ui.adapters.home.SettingsAdapter
 import kotlinx.android.synthetic.main.fragment_lists.view.*
 import kotlinx.android.synthetic.main.header_back.view.*
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,9 +47,11 @@ class SettingsList : Fragment(), SettingsAdapter.ItemClickListener, Callback<Str
         setupAdapter()
 
 
+        mView.BackTextView.text = getString(R.string.text_settings)
+        mView.BackButton.setImageDrawable(activity!!.getDrawable(R.drawable.ic_person_pin_black_36dp))
 
         mView.BackButton.setOnClickListener {
-            FragmentHelper.changeFragment("Profile",activity!!.supportFragmentManager,0)
+            FragmentHelper.changeFragment("Profile", activity!!.supportFragmentManager, 0)
         }
 
         return mView
@@ -80,7 +85,7 @@ class SettingsList : Fragment(), SettingsAdapter.ItemClickListener, Callback<Str
         when (position) {
 
             0 -> {
-                FragmentHelper.changeFragment("EditProfile", activity!!.supportFragmentManager,1)
+                FragmentHelper.changeFragment("EditProfile", activity!!.supportFragmentManager, 1)
             }
 
             1 -> {
@@ -94,6 +99,9 @@ class SettingsList : Fragment(), SettingsAdapter.ItemClickListener, Callback<Str
 
 
         dialogHelper = DialogHelper(activity!!)
+
+
+
         sharedPreferencesHelper =
             SharedPreferencesHelper(activity!!)
         apiService =
@@ -115,8 +123,15 @@ class SettingsList : Fragment(), SettingsAdapter.ItemClickListener, Callback<Str
     override fun onResponse(call: Call<String>, response: Response<String>) {
         if (response.isSuccessful) {
             dialogHelper.progressDismiss()
+
+            EventBus.getDefault().postSticky(EventBusHelper.notificationService(false))
+            //var onlineStatus = SetOnline(sharedPreferencesHelper)
+            //onlineStatus.setOffline()
+
+
             sharedPreferencesHelper.deleteAccessToken()
-            startActivity(Intent(activity!!,MainActivity::class.java))
+
+            startActivity(Intent(activity!!, MainActivity::class.java))
             activity!!.finish()
         }
     }

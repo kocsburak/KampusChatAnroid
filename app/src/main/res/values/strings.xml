@@ -15,7 +15,8 @@
     <string name="text_date_of_birth">Date of Birth</string>
     <string name="text_forgot_password">Forgot Password?</string>
     <string name="text_do_not_have_account">Get an Account Now</string>
-    <string name="text_have_account">Do You Have an Account?</string>
+    <string name="text_have_account">Do You Have an Account? Sign in Now</string>
+    <string name="text_need_account">Do You Need an Account? Sign up Now</string>
     <string name="text_select_university">Select University</string>
     <string name="text_select_department">Select Department</string>
     <string name="text_back_to_login">Get Back to Login</string>
@@ -34,7 +35,7 @@
     <string name="text_like">Like</string>
     <string name="text_liked">Liked</string>
 
-    <string name="text_lists">Lists</string>
+    <string name="text_lists">List</string>
     <string name="text_shuffle">Shuffle</string>
     <string name="text_profile">Profile</string>
     <string name="text_informations">Informations</string>
@@ -70,6 +71,21 @@
     <string name="text_offline">Offline</string>
     <string name="text_typing">Typing...</string>
 
+    <string name="text_shuffle_right">Shuffle Count:</string>
+    <string name="text_list_empty">No Person is Banned</string>
+    <string name="text_chat_list_empty">Your List is Empty!</string>
+
+    <string name="text_chat_list">Chat List</string>
+    <string name="text_settings">Settings</string>
+    <string name="text_sending">Sending...</string>
+    <string name="text_sended">Sended</string>
+    <string name="text_seen">Seen!</string>
+
+    <string name="text_yes">Yes!</string>
+    <string name="text_no">No!</string>
+
+    <string name="text_ban_user_title">Ban User!</string>
+    <string name="text_ban_user_message">Do You Want To Ban This User?</string>
 
     <string name="error_field_blank">This field cannot be blank</string>
     <string name="error_credentials_invalid">Credentials are invalid</string>

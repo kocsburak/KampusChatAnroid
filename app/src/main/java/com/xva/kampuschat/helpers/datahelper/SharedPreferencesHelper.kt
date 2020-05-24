@@ -105,4 +105,19 @@ class SharedPreferencesHelper {
     }
 
 
+    fun saveServiceStatus(status:Boolean) {
+
+
+        editor.putBoolean("status",status)
+        editor.commit()
+
+    }
+
+
+    fun getServiceStatus(): Boolean {
+
+        return pref.getBoolean("status",true)
+    }
+
+
 }

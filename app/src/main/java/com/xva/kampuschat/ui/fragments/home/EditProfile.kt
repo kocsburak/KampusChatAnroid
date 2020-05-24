@@ -55,6 +55,9 @@ class EditProfile : Fragment(), Callback<String> {
         apiService =
             RetrofitBuilder.createServiceWithAuth(ApiService::class.java, sharedPreferencesHelper)
 
+        mView.BackTextView.text = getString(R.string.text_edit_profile)
+        mView.BackButton.setImageDrawable(activity!!.getDrawable(R.drawable.ic_check_circle_black_36dp))
+
         mView.BackButton.setOnClickListener {
             updateProfile()
         }

@@ -9,7 +9,7 @@
         android:id="@+id/view2"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="#fff"
         android:alpha="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,10 +22,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_keyboard_arrow_left_black_36dp"
+        android:background="@drawable/back_button_backgorund"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_keyboard_arrow_left_black_48dp" />
+        />
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -35,7 +37,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@color/colorGray"
+        android:src="@color/colorBlue"
+        app:civ_border_color="#fff"
+        app:civ_border_width="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Back"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,6 +54,7 @@
         android:textStyle="bold"
         android:textSize="18sp"
         android:singleLine="true"
+        android:textColor="#fff"
         app:layout_constraintEnd_toStartOf="@+id/Ban"
         app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
         app:layout_constraintTop_toTopOf="@+id/ProfilePhoto" />
@@ -62,6 +67,7 @@
         android:layout_marginEnd="8dp"
         android:text="TextView"
         android:singleLine="true"
+        android:textColor="#fff"
         app:layout_constraintBottom_toBottomOf="@+id/ProfilePhoto"
         app:layout_constraintEnd_toStartOf="@+id/Ban"
         app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
@@ -75,7 +81,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/ProfilePhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ProfilePhoto"
-        app:srcCompat="@drawable/ic_ban" />
+        android:src="@drawable/ic_ban_black_24dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

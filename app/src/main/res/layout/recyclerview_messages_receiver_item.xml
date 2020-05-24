@@ -9,29 +9,23 @@
 
     android:maxWidth="300dp"
     android:maxHeight="300dp"
-    android:minWidth="200dp"
+    android:minWidth="150dp"
     android:minHeight="100dp">
 
 
     <ImageView
         android:id="@+id/ReceiverPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:maxWidth="150dp"
-        android:maxHeight="150dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@color/colorGray"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/TextLayout"
+        android:id="@+id/ReceiverTextLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/message_item_receiver_background"
@@ -39,8 +33,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/ReceiverMessage"
@@ -56,19 +50,24 @@
             app:layout_constraintBottom_toTopOf="@+id/ReceiverDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/ReceiverDate"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:alpha="0.8"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="#fff"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
 
 

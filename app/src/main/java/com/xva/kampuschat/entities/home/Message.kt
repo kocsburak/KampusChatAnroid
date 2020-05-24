@@ -31,6 +31,7 @@ class Message {
     lateinit var updated_at : String
 
     var is_process_completed = false
+    var is_sended = true
 
 
 }

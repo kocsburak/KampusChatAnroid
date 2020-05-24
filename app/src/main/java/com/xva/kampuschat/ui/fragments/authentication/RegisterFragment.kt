@@ -23,6 +23,7 @@ import com.xva.kampuschat.helpers.uihelper.DialogHelper
 import com.xva.kampuschat.helpers.datahelper.EventBusHelper
 import com.xva.kampuschat.helpers.uihelper.FragmentHelper
 import com.xva.kampuschat.helpers.datahelper.SharedPreferencesHelper
+import com.xva.kampuschat.ui.activities.HomeActivity
 import kotlinx.android.synthetic.main.fragment_register.view.*
 import okhttp3.ResponseBody
 import org.greenrobot.eventbus.EventBus
@@ -198,7 +199,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, Callback<AccessToken>
         if (response.isSuccessful) {
             preferencesHelper.saveAccessToken(response.body()!!)
             preferencesHelper.saveEmail(mView.editTextEmail.text.toString())
-            startActivity(Intent(activity!!, VerifyActivity::class.java))
+            startActivity(Intent(activity!!, HomeActivity::class.java))
             activity!!.finish()
 
         } else {

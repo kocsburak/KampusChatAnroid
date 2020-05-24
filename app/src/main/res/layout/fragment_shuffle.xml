@@ -4,7 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBlue"
+
+    >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ProfilePhotoBackground"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="#fff"
+        app:civ_border_color="#fff"
+        app:civ_border_width="2dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include4" />
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -19,6 +35,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include4" />
+
+
+
+
 
     <include
         android:id="@+id/include4"
@@ -38,5 +58,24 @@
         app:layout_constraintStart_toStartOf="@+id/ProfilePhoto"
         app:layout_constraintTop_toTopOf="@+id/ProfilePhoto"
         app:srcCompat="@drawable/ic_whatshot_black_48dp" />
+
+    <TextView
+        android:id="@+id/ShuffleText"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@drawable/shuffle_text_background"
+        android:gravity="center"
+        android:text="@string/text_shuffle_right"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:minWidth="200dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ProfilePhotoBackground"
+        app:layout_constraintVertical_bias="0.26" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

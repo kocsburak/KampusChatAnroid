@@ -61,9 +61,9 @@ class BansFragment : Fragment(), Callback<List<Profile>>, ListsAdapter.ItemClick
 
     private fun setClicks() {
 
-        mView.ChatListButton.setOnClickListener {
+        mView.Button.setOnClickListener {
 
-            FragmentHelper.changeFragment("ChatList", activity!!.supportFragmentManager, 1)
+            FragmentHelper.changeFragment("ChatList", activity!!.supportFragmentManager, 1,"Bans")
         }
 
     }
@@ -99,11 +99,7 @@ class BansFragment : Fragment(), Callback<List<Profile>>, ListsAdapter.ItemClick
             }
 
             if (response.code() == 204) {
-                Toast.makeText(
-                    activity!!,
-                    getString(R.string.error_nobody_is_found),
-                    Toast.LENGTH_LONG
-                ).show()
+                showListEmptyScreen()
             }
 
 
@@ -176,6 +172,27 @@ class BansFragment : Fragment(), Callback<List<Profile>>, ListsAdapter.ItemClick
         profiles.removeAt(listPosition)
         adapter.notifyDataSetChanged()
         dialogHelper.progressDismiss()
+
+
+        if(profiles.size == 0){
+
+            showListEmptyScreen()
+
+        }
+
+
+    }
+
+
+    private fun showListEmptyScreen(){
+
+
+        mView.Lists.visibility = View.GONE
+        mView.ListsEmptyBackground.visibility = View.VISIBLE
+        mView.imageView3.visibility = View.VISIBLE
+        mView.ListEmptyText.visibility = View.VISIBLE
+
+
     }
 
 

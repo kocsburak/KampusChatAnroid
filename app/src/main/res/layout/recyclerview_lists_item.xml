@@ -13,8 +13,8 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         app:civ_border_width="2dp"
-        app:civ_border_color="@color/colorGray"
-        android:src="@color/colorGray"
+        app:civ_border_color="#fff"
+        android:src="@color/colorBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,6 +31,7 @@
         android:text="TextView"
         android:textStyle="bold"
         android:fontFamily="casual"
+        android:textColor="#fff"
         app:layout_constraintEnd_toStartOf="@+id/ItemSettings"
         app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/ProfilePhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ProfilePhoto"
-        app:srcCompat="@drawable/ic_linear_scale_black_24dp" />
+        android:src="@drawable/ic_recycler_settings" />
 
     <TextView
         android:id="@+id/Deparment"
@@ -55,6 +56,7 @@
         android:text="TextView"
         android:textStyle="bold"
         android:fontFamily="casual"
+        android:textColor="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ItemSettings"
         app:layout_constraintStart_toEndOf="@+id/ProfilePhoto"

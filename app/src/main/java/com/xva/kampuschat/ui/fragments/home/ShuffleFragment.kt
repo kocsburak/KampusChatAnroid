@@ -19,6 +19,7 @@ import com.xva.kampuschat.helpers.uihelper.DialogHelper
 import com.xva.kampuschat.helpers.uihelper.FragmentHelper
 import com.xva.kampuschat.helpers.datahelper.SharedPreferencesHelper
 import com.xva.kampuschat.helpers.chathelper.StartChat
+import kotlinx.android.synthetic.main.fragment_shuffle.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,7 +51,7 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>,
     ): View? {
         mView = inflater.inflate(R.layout.fragment_shuffle, container, false)
 
-        var chatButton = mView.findViewById<ImageView>(R.id.ChatListButton)
+        var chatButton = mView.findViewById<ImageView>(R.id.Button)
         chatButton.setOnClickListener(this)
 
 
@@ -81,6 +82,9 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>,
                 shuffle_count *= -1
             }
         }
+
+        mView.ShuffleText.text = getString(R.string.text_shuffle_right) + " " + shuffle_count
+
 
     }
 
@@ -113,7 +117,7 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>,
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.ChatListButton -> {
+            R.id.Button -> {
                 FragmentHelper.changeFragment("ChatList", activity!!.supportFragmentManager,1)
             }
 
@@ -140,7 +144,9 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>,
                 matched_user = response.body()!!
                 data_count = matched_user!!.count
                 Log.e("cc",data_count.toString())
+                Log.e("userpp",""+matched_user!!.profile_photo_url)
                 sendUserToDialog()
+                mView.ShuffleText.text = getString(R.string.text_shuffle_right) + " " + shuffle_count
 
             }
 
@@ -175,7 +181,7 @@ class ShuffleFragment : Fragment(), View.OnClickListener, Callback<Profile>,
 
     override fun completed() {
         dialogHelper.progressDismiss()
-        FragmentHelper.changeFragment("ChatList",activity!!.supportFragmentManager,1)
+        FragmentHelper.changeFragment("ChatList",activity!!.supportFragmentManager,1,"Shuffle")
     }
 
 }

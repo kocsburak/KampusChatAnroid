@@ -139,7 +139,7 @@ interface ApiService {
 
 
     @GET("isMessageSeen/{message_id}")
-    fun isMessageSeen(@Path("message_id") message_id: Number): Call<String>
+    fun isMessageSeen(@Path("message_id") message_id: Number): Call<Status>
 
     @PUT("setIsMessageSeenValue")
     @FormUrlEncoded

@@ -102,7 +102,7 @@ class ChatListAdapter : RecyclerView.Adapter<ChatListAdapter.MyViewHolder> {
             } else {
                 settings.setImageDrawable(
                     itemView.resources.getDrawable(
-                        R.drawable.ic_linear_scale_black_24dp,
+                        R.drawable.ic_recycler_settings,
                         itemView.resources.newTheme()
                     )
                 )

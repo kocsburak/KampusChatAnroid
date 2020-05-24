@@ -12,12 +12,14 @@ class PhotoHelper {
     companion object {
 
 
+        var bitmap: Bitmap? = null
+        var url: String? = null
+
         public fun getBitmap(url: String): Bitmap? {
 
 
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            var imageBytes = byteArrayOutputStream.toByteArray()
-            imageBytes = Base64.decode(url, Base64.DEFAULT)
+
+            var imageBytes = Base64.decode(url, Base64.DEFAULT)
             val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 
             return decodedImage
@@ -35,6 +37,11 @@ class PhotoHelper {
             return image!!
 
         }
+
+
+
+
+
 
 
     }

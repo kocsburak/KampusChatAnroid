@@ -14,7 +14,7 @@ class FragmentHelper {
 
     companion object {
 
-        fun changeFragment(name: String, fragmentManager: FragmentManager,code:Int) {
+        fun changeFragment(name: String, fragmentManager: FragmentManager,code:Int,last_fragment:String = "Shuffle") {
 
             var fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
@@ -81,11 +81,11 @@ class FragmentHelper {
                 }
 
                 "ChatList" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder, ChatList())
+                    fragmentTransaction.replace(R.id.fragment_place_holder, ChatList(last_fragment))
                 }
 
                 "Message" -> {
-                    fragmentTransaction.replace(R.id.fragment_place_holder,MessageFragment())
+                    fragmentTransaction.replace(R.id.fragment_place_holder,MessageFragment(last_fragment))
                 }
 
             }

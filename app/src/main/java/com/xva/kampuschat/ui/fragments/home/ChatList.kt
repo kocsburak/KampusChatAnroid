@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xva.kampuschat.R
-import com.xva.kampuschat.ui.adapters.home.ChatListAdapter
 import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.entities.home.Chat
 import com.xva.kampuschat.entities.home.Message
@@ -21,7 +20,9 @@ import com.xva.kampuschat.helpers.uihelper.FragmentHelper
 import com.xva.kampuschat.interfaces.api.ApiService
 import com.xva.kampuschat.interfaces.dialog.IProcessDialog
 import com.xva.kampuschat.interfaces.process.IProcessCompleted
-import kotlinx.android.synthetic.main.fragment_lists.view.*
+import com.xva.kampuschat.ui.adapters.home.ChatListAdapter
+import kotlinx.android.synthetic.main.fragment_chat_list.view.*
+import kotlinx.android.synthetic.main.fragment_lists.view.Lists
 import kotlinx.android.synthetic.main.header_back.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -32,7 +33,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickListener,
+class ChatList(var last_fragment:String) : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickListener,
     IProcessDialog, IProcessCompleted {
 
 
@@ -53,7 +54,7 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.fragment_settings, container, false)
+        mView = inflater.inflate(R.layout.fragment_chat_list, container, false)
         sharedPreferencesHelper =
             SharedPreferencesHelper(activity!!)
         dialogHelper = DialogHelper(activity!!)
@@ -61,9 +62,11 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
             RetrofitBuilder.createServiceWithAuth(ApiService::class.java, sharedPreferencesHelper)
 
 
+        mView.BackTextView.text = getString(R.string.text_chat_list)
+
         mView.BackButton.setOnClickListener {
 
-            FragmentHelper.changeFragment("Shuffle", activity!!.supportFragmentManager, 1)
+            FragmentHelper.changeFragment(last_fragment, activity!!.supportFragmentManager, 1)
 
         }
 
@@ -103,11 +106,7 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
             }
 
             if (response.code() == 204) {
-                Toast.makeText(
-                    activity!!,
-                    getString(R.string.error_nobody_is_found),
-                    Toast.LENGTH_LONG
-                ).show()
+                showEmptyListScreen()
             }
 
 
@@ -126,6 +125,10 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
                 Log.e("User", item.fullname)
             }
 
+        }
+
+        if(chats.size == 0){
+            showEmptyListScreen()
         }
     }
 
@@ -155,7 +158,7 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
         if (view == "view") {
             EventBus.getDefault()
                 .postSticky(EventBusHelper.sendChatInformations(chats[listPosition]))
-            FragmentHelper.changeFragment("Message", activity!!.supportFragmentManager, 0)
+            FragmentHelper.changeFragment("Message", activity!!.supportFragmentManager, 0,last_fragment)
         } else {
             dialogHelper.process(processList, this, getString(R.string.text_choose_process))
         }
@@ -192,6 +195,10 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
     // user is banned
     override fun completed() {
         chats.removeAt(listPosition)
+
+        if (chats.size == 0) {
+            showEmptyListScreen()
+        }
         dialogHelper.progressDismiss()
     }
 
@@ -237,6 +244,10 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
 
         }
 
+        if (chats.size > 0) {
+            showListScreen()
+        }
+
         sortList()
         adapter.notifyDataSetChanged()
 
@@ -250,6 +261,25 @@ class ChatList : Fragment(), Callback<List<Chat>>, ChatListAdapter.ItemClickList
             if (lhs.message_update_time > rhs.message_update_time) -1 else if (lhs.message_update_time < rhs.message_update_time) 1 else 0
         })
 
+
+    }
+
+
+    private fun showEmptyListScreen() {
+
+        mView.Lists.visibility = View.GONE
+        mView.ChatListsEmptyBackground.visibility = View.VISIBLE
+        mView.GestureIcon.visibility = View.VISIBLE
+        mView.ChatListEmptyText.visibility = View.VISIBLE
+
+    }
+
+    private fun showListScreen() {
+
+        mView.Lists.visibility = View.VISIBLE
+        mView.ChatListsEmptyBackground.visibility = View.GONE
+        mView.GestureIcon.visibility = View.GONE
+        mView.ChatListEmptyText.visibility = View.GONE
 
     }
 

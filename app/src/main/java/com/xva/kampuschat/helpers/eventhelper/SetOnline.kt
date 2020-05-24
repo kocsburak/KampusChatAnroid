@@ -1,5 +1,6 @@
 package com.xva.kampuschat.helpers.eventhelper
 
+import android.util.Log
 import com.xva.kampuschat.api.RetrofitBuilder
 import com.xva.kampuschat.entities.home.Status
 import com.xva.kampuschat.interfaces.api.ApiService
@@ -19,6 +20,8 @@ class SetOnline(var sharedPreferencesHelper: SharedPreferencesHelper) : Callback
 
     public fun setOnline() {
 
+        Log.e("user_id",""+sharedPreferencesHelper.getEvent().user_id)
+
         if (sharedPreferencesHelper.getEvent().user_id != -1) {
 
             call = apiService.updateOnlineStatus(sharedPreferencesHelper.getEvent().user_id, true)
@@ -30,6 +33,8 @@ class SetOnline(var sharedPreferencesHelper: SharedPreferencesHelper) : Callback
 
 
     public fun setOffline() {
+
+        Log.e("user_id",""+sharedPreferencesHelper.getEvent().user_id)
 
         if (sharedPreferencesHelper.getEvent().user_id != -1) {
 
@@ -56,11 +61,12 @@ class SetOnline(var sharedPreferencesHelper: SharedPreferencesHelper) : Callback
     }
 
     override fun onResponse(call: Call<Status>, response: Response<Status>) {
-
+        Log.e("OnlineDurum","Calisti")
 
         if (response.code() == 200) {
 
             var status = response.body()!!
+
 
             if (status.status) {
                 listener.setUserOnlineValue(true)

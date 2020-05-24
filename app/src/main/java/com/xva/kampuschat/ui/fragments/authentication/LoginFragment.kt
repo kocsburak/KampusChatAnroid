@@ -1,5 +1,6 @@
 package com.xva.kampuschat.ui.fragments.authentication
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.xva.kampuschat.helpers.uihelper.DialogHelper
 import com.xva.kampuschat.helpers.uihelper.FragmentHelper
 import com.xva.kampuschat.helpers.datahelper.SharedPreferencesHelper
 import com.xva.kampuschat.helpers.authelper.Verify
+import com.xva.kampuschat.ui.activities.HomeActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import okhttp3.ResponseBody
@@ -90,7 +92,8 @@ class LoginFragment : Fragment(), View.OnClickListener, Callback<AccessToken>,
         if (response.isSuccessful) {
             preferencesHelper.saveAccessToken(response.body()!!)
             preferencesHelper.saveEmail(mView.Username.text.toString())
-            checkUserVerify() // TODO : Burayı geri ekle
+           // checkUserVerify() // TODO : Burayı geri ekle
+           startActivity(Intent(activity!!,HomeActivity::class.java))
         } else {
             dialogHelper.progressDismiss()
             handleErrors(response.errorBody(), response.code())

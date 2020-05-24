@@ -66,7 +66,7 @@ class ListsAdapter : RecyclerView.Adapter<ListsAdapter.MyViewHolder> {
             this.department.text = profile.department_name
 
 
-            if(profile.profile_photo_url != null && profile.profile_photo_url != "" && profile.profile_photo_url != "forbidden"){
+            if(profile.profile_photo_url != null && profile.profile_photo_url != ""){
                 pp.setImageBitmap(PhotoHelper.getBitmap(profile.profile_photo_url!!))
             }
 

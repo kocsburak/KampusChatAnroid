@@ -19,6 +19,7 @@ import com.xva.kampuschat.helpers.uihelper.DialogHelper
 import com.xva.kampuschat.helpers.uihelper.FragmentHelper
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.header_profile.view.*
+import kotlinx.android.synthetic.main.header_shuffle.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import retrofit2.Call
@@ -45,7 +46,9 @@ class ProfileFragment(var code: Int) : Fragment(), Callback<Profile> {
         dialogHelper = DialogHelper(activity!!)
         checkProfile()
 
-        mView.SettingsButton.setOnClickListener {
+        mView.Button.setImageDrawable(activity!!.getDrawable(R.drawable.ic_recycler_settings))
+
+        mView.Button.setOnClickListener {
 
             FragmentHelper.changeFragment("Settings",activity!!.supportFragmentManager,1)
 
@@ -164,7 +167,7 @@ class ProfileFragment(var code: Int) : Fragment(), Callback<Profile> {
 
     private fun setPP(code:Int) {
 
-        if(code == 1 &&  profile!!.liked_each_other && profile!!.profile_photo_url != null){
+        if(code == 1  && profile!!.profile_photo_url != null){
             mView.ProfilePhoto.setImageBitmap(PhotoHelper.getBitmap(profile!!.profile_photo_url!!))
         }
         if(code == 0 && profile!!.profile_photo_url != null){

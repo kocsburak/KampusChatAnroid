@@ -10,11 +10,9 @@ import com.xva.kampuschat.entities.home.Message
 import com.xva.kampuschat.helpers.datahelper.EventBusHelper
 import com.xva.kampuschat.helpers.datahelper.SharedPreferencesHelper
 import com.xva.kampuschat.helpers.messagehelper.*
+import com.xva.kampuschat.helpers.photohelper.PhotoHelper
 import com.xva.kampuschat.interfaces.api.ApiService
-import com.xva.kampuschat.interfaces.message.IAllMessageArrived
-import com.xva.kampuschat.interfaces.message.IMessageSeenUpdated
-import com.xva.kampuschat.interfaces.message.IMessageSend
-import com.xva.kampuschat.interfaces.message.INewMessagesArrived
+import com.xva.kampuschat.interfaces.message.*
 import com.xva.kampuschat.interfaces.online.IOnlineStatus
 import com.xva.kampuschat.interfaces.typing.ITypingStatus
 import org.greenrobot.eventbus.EventBus
@@ -22,7 +20,7 @@ import org.greenrobot.eventbus.Subscribe
 
 class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
-    IMessageSeenUpdated, ITypingStatus, INewMessagesArrived, IMessageSend {
+    IMessageSeenUpdated, ITypingStatus, INewMessagesArrived, IMessageSend, IMessageSeen {
 
 
     private lateinit var apiService: ApiService
@@ -30,18 +28,23 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
     private lateinit var send_messages_list: ArrayList<Message>
     private lateinit var update_messages_seen_list: ArrayList<Int>
+    private lateinit var check_message_seen_list: ArrayList<Message>
 
     private var user_online_permission = false
     private var send_message_permission = true
     private var update_message_seen_permission = true
     private var new_messages_permission = false
     private var user_typing_permission = false
+    private var check_message_seen_permission = true
 
 
     private var other_user_id: Number = -1
     private lateinit var chat_id: Number
     private var update_message_seen_queue_id = 0
     private var send_message_queue_count = 0
+    private var check_message_seen_list_count = 0
+    private var last_message_id = -1
+
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -59,10 +62,12 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
         send_messages_list = ArrayList()
         update_messages_seen_list = ArrayList()
+        check_message_seen_list = ArrayList()
 
         EventBus.getDefault().register(this)
 
         checkOnlineStatus()
+        Log.e("Service","Calisti")
 
     }
 
@@ -113,8 +118,6 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
 
     // GET ALL MESSAGES
-
-
     @Subscribe(sticky = true)
     internal fun onDataEvent(data: EventBusHelper.sendChatIds) {
         chat_id = data.chat_id
@@ -125,7 +128,13 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
             data.owner_id
         }
 
-        getAllMessages()
+        if(sharedPreferencesHelper.getServiceStatus()){
+            getAllMessages()
+        }else{
+            sharedPreferencesHelper.saveServiceStatus(true)
+        }
+
+
         Log.e("ChatIdEventBus", "OK")
     }
 
@@ -151,7 +160,9 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
             if (messages.size > 0) {
                 // update seen
 
+                getLastMessageId(messages)
                 addSeenQueue(messages, 0)
+                checkAllMessageForUnseenMessage(messages)
 
                 if (update_message_seen_permission) {
 
@@ -188,6 +199,21 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
     }
 
 
+    private fun getLastMessageId(messages: ArrayList<Message>) {
+
+        for (message in messages) {
+
+            if (message.id > last_message_id) {
+                last_message_id = message.id
+            }
+
+
+        }
+
+
+    }
+
+
     // UPDATE MESSAGE SEEN VALUE
 
 
@@ -200,7 +226,7 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
         for (item in messages!!) {
 
-            if (!item.is_seen) {
+            if (!item.is_seen && item.sender_user_id != sharedPreferencesHelper.getEvent().user_id) {
                 update_messages_seen_list.add(item.id)
             }
 
@@ -218,6 +244,7 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
     private fun updateMessageSeenValue() {
 
         if (update_messages_seen_list.size > 0) {
+
             var messageSeenStatusHelper =
                 UpdateSeen(apiService, this)
             messageSeenStatusHelper.updateMessageSeenValue(update_messages_seen_list[update_message_seen_queue_id])
@@ -332,10 +359,11 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
         if (messages != null && messages.size > 0) {
             EventBus.getDefault().post(EventBusHelper.sendMessages(messages))
-            updateNewMessagePermission(false)
+            //updateNewMessagePermission(false)
             updateTypingPermission(false)
             addSeenQueue(messages, 1)
 
+            getNewMessages()
             Log.e("newMessagesHasArrived", "Size > 0")
         } else {
 
@@ -386,7 +414,16 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
     @Subscribe
     internal fun onDataEvent(data: EventBusHelper.sendMessagesToServiceForSending) {
 
+
+        if(data.message.type == "Photo"){
+
+            data.message.message = PhotoHelper.url!!
+        }
+
+        Log.e("URL4",""+data.message)
+
         addMessageQueue(data.message)
+
         Log.e("EventBusSendMessage", "OK")
 
     }
@@ -412,7 +449,10 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
     private fun sendMessage() {
 
         var helper = SendMessage(apiService, this)
+        last_message_id++
+        send_messages_list[send_message_queue_count].id = last_message_id
         helper.sendMessage(send_messages_list[send_message_queue_count])
+        Log.e("URL5",""+send_messages_list[send_message_queue_count].message)
         Log.e("sendMessage", "OK")
 
 
@@ -422,6 +462,11 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
         if (status) {
 
+            // addCheckSeenQueue(send_messages_list[send_message_queue_count])
+            EventBus.getDefault()
+                .post(EventBusHelper.isSended(send_messages_list[send_message_queue_count].id))
+            addCheckSeenQueue(send_messages_list[send_message_queue_count])
+            Log.e("SenMessageId", "" + send_messages_list[send_message_queue_count].id)
             send_message_queue_count++
 
             if (send_message_queue_count < send_messages_list.size) {
@@ -442,6 +487,98 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
         }
 
+
+    }
+
+
+    private fun checkAllMessageForUnseenMessage(messages: ArrayList<Message>) {
+
+        for (message in messages) {
+
+
+            if (!message.is_seen) {
+                Log.e("Message_Id", "" + message.id)
+                check_message_seen_list.add(message)
+            }
+
+        }
+
+        if (check_message_seen_list.size > 0) {
+
+            check_message_seen_permission = false
+            checkIfMessageSeen()
+
+        }
+
+
+    }
+
+
+    private fun addCheckSeenQueue(message: Message) {
+
+        check_message_seen_list.add(message)
+
+
+        if (check_message_seen_permission) {
+
+            check_message_seen_permission = false
+            checkIfMessageSeen()
+
+        }
+        Log.e("ListSize", "" + check_message_seen_list.size)
+
+
+    }
+
+
+    private fun checkIfMessageSeen() {
+
+
+        var helper = SeenStatus(apiService, this)
+        Log.e("MessageId:", "" + check_message_seen_list[check_message_seen_list_count].id)
+        helper.checkIfMessageIsSeen(check_message_seen_list[check_message_seen_list_count].id)
+
+
+    }
+
+
+    override fun messageSeen(status: Boolean) {
+
+        Log.e("messageSeen", "oldu")
+
+        if (status) {
+
+            Log.e("messageSeen", "oldu")
+            EventBus.getDefault()
+                .post(EventBusHelper.updateSeenValue(check_message_seen_list[check_message_seen_list_count].id))
+            Log.e("MessageSeenId", "" + check_message_seen_list[check_message_seen_list_count].id)
+            check_message_seen_list_count++
+            delayCheckMessageSeen()
+
+        } else {
+
+            delayCheckMessageSeen()
+        }
+
+    }
+
+
+    private fun delayCheckMessageSeen() {
+
+        val handler = Handler()
+        handler.postDelayed(
+            {
+
+                if (check_message_seen_list_count < check_message_seen_list.size) {
+                    checkIfMessageSeen()
+                } else {
+                    check_message_seen_permission = true
+                }
+
+                Log.e("delayCheckMessageSeen", "Ok")
+            },
+            1000
+        )
 
     }
 
@@ -479,6 +616,12 @@ class MessageService : Service(), IAllMessageArrived, IOnlineStatus,
 
         send_message_permission = value
         Log.e("SendMessagePermission", "$value")
+    }
+
+    private fun updateCheckMessageSeenPermission(value: Boolean) {
+
+        check_message_seen_permission = value
+
     }
 
 

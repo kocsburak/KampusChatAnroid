@@ -11,11 +11,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.xva.kampuschat.R
 import com.xva.kampuschat.entities.auth.Profile
+import com.xva.kampuschat.helpers.listhelper.Ban
 import com.xva.kampuschat.helpers.photohelper.PhotoHelper
-import com.xva.kampuschat.helpers.photohelper.Picasso
 import com.xva.kampuschat.interfaces.dialog.IDatePicker
 import com.xva.kampuschat.interfaces.dialog.IProcessDialog
 import com.xva.kampuschat.interfaces.dialog.IShuffleDialog
+import com.xva.kampuschat.interfaces.process.IProcessCompleted
 import kotlinx.android.synthetic.main.dialog_matched.view.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -78,7 +79,8 @@ class DialogHelper(var context: Context) {
 
             var photo = view.findViewById<ImageView>(R.id.profilePhoto2)
 
-            Picasso.loadPhoto(user.profile_photo_url!!, photo)
+            photo.setImageBitmap(PhotoHelper.getBitmap(user.profile_photo_url!!))
+
 
         }
 
@@ -221,6 +223,46 @@ class DialogHelper(var context: Context) {
         picker.show()
 
     }
+
+
+    public fun banUserAlertDialog(user_id: Number,listener:IProcessCompleted) {
+
+        val builder = AlertDialog.Builder(context)
+
+        // Set the alert dialog title
+        builder.setTitle(context.getString(R.string.text_ban_user_title))
+
+        // Display a message on alert dialog
+        builder.setMessage(context.getString(R.string.text_ban_user_message))
+
+        // Set a positive button and its click listener on alert dialog
+        builder.setPositiveButton(context.getString(R.string.text_yes)) { dialog, which ->
+
+            var helper = Ban(context, listener)
+            helper.ban(user_id)
+            dialog.dismiss()
+            progress()
+
+        }
+
+
+        // Display a negative button on alert dialog
+        builder.setNegativeButton(context.getString(R.string.text_no)) { dialog, which ->
+            dialog.dismiss()
+        }
+
+
+        // Finally, make the alert dialog using builder
+        val dialog: AlertDialog = builder.create()
+
+        // Display the alert dialog on app interface
+        dialog.show()
+        dialog.setCancelable(false)
+
+
+    }
+
+
 
 
 }

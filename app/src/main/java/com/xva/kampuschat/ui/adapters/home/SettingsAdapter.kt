@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xva.kampuschat.R
@@ -49,14 +50,22 @@ class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.MyViewHolder> {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var text: TextView = itemView.findViewById(R.id.textView2) as TextView
+        var image: ImageView = itemView.findViewById(R.id.imageView) as ImageView
 
         fun setData(text: String, position: Int, clickListener: ItemClickListener) {
 
             this.text.text = text
 
+            if(text == "Edit Profile"){
+                image.setImageDrawable(itemView.resources.getDrawable(R.drawable.ic_edit_black_36dp, itemView.resources.newTheme()))
+            }
+
             itemView.setOnClickListener {
                 clickListener.onItemClick(position)
             }
+
+
+
 
 
         }

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#fff</color>
+    <color name="colorPrimaryDark">#2196F3</color>
     <color name="colorAccent">#D81B60</color>
 
     <color name="colorGray">#C9C5C5</color>
     <color name="colorBlue">#2196F3</color>
     <color name="colorGreen">#8BC34A</color>
+    <color name="colorRed">#CE3F35</color>
+    <color name="colorYellow">#B7C462</color>
 
     <color name="colorBanned">#645656</color>
 

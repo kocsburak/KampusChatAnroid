@@ -32,6 +32,7 @@ class EventBusHelper {
     internal class messages(var messages: ArrayList<Message>?)
 
     internal class sendMessagesToServiceForSending(var message: Message)
+    internal class sendPhotoPartForMessage(var part:String)
 
     // Chat
     internal class sendChatInformations(var chat: Chat)
@@ -45,6 +46,11 @@ class EventBusHelper {
     internal class typingStatus(var status: Boolean?)
     internal class sendTypingStatus(var status: Boolean?)
 
+
+    // Seen
+
+    internal class isSended(var id:Int)
+    internal class updateSeenValue(var id:Int)
 
     // Dialog
     internal class progress(var status: Boolean)
